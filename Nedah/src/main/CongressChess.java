@@ -9,6 +9,7 @@ public class CongressChess {
 	private Scanner scanner;
 	private GameBoardDisplay gameBoardDisplay;
 	private MoveGenerator moveGenerator;
+	private GameBoardInitializer gameBoardInitializer;
 	
 	public static final int PAWN = 1;
 	public static final int HORSE = 2;
@@ -29,8 +30,8 @@ public class CongressChess {
 	
 	public void init(){
 		scanner = new Scanner(System.in);
-		GameBoardInitializer gbi = new GameBoardInitializer();
-		board = gbi.generateNewBoard();
+		gameBoardInitializer = new GameBoardInitializer();
+		board = gameBoardInitializer.generateNewBoard();
 		gameBoardDisplay = new GameBoardDisplay();
 		moveGenerator = new MoveGenerator();
 		run = true;
@@ -92,7 +93,9 @@ public class CongressChess {
 	
 	public void checkMove(String move){}
 	
-	public void updateBoardState(String move){}
+	public void updateBoardState(String move){
+		
+	}
 	
 	public void checkGameOver(){}
 	
