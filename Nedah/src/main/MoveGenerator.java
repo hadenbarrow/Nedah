@@ -25,8 +25,14 @@ public class MoveGenerator {
 		for(int i = 0; i < board.length; i++){
 			for(int j = 0; j < board[0].length; j++){
 				if(board[i][j] == PIECES.PAWN.value){
-					if(!checkCollisionWithPlayerPiece(board, i - 1, j) && isOnBoard(i - 1,j)){
+					if(!checkCollisionWithPlayerPiece(board, i - 1, j) && isOnBoard(i - 1,j) && !checkCollisionWithComputerPiece(board, i - 1, j)){
 						moves.add(createMoveString(i, j, i - 1, j));
+					}
+					if(checkCollisionWithComputerPiece(board, i - 1, j + 1)){
+						moves.add(createMoveString(i, j, i - 1, j + 1));	
+					}
+					if(checkCollisionWithComputerPiece(board, i - 1, j-1)){
+						moves.add(createMoveString(i, j, i - 1, j - 1));	
 					}
 				}
 				else if(board[i][j] == PIECES.HORSE.value){
@@ -216,8 +222,14 @@ public class MoveGenerator {
 				
 				if(board[i][j] == PIECES.CPAWN.value){
 					//pawn only has one potential move, moving forward by 1
-					if(!checkCollisionWithComputerPiece(board, i + 1, j) && isOnBoard(i + 1, j)){
+					if(!checkCollisionWithComputerPiece(board, i + 1, j) && isOnBoard(i + 1, j) && !checkCollisionWithPlayerPiece(board, i+1, j)){
 						moves.add(createMoveString(i, j, i + 1, j)); 
+					}
+					if(checkCollisionWithPlayerPiece(board, i+1, j-1)){
+						moves.add(createMoveString(i, j, i+1, j-1));
+					}
+					if(checkCollisionWithPlayerPiece(board, i+1, j+1)){
+						moves.add(createMoveString(i, j, i+1, j+1));
 					}
 				}
 				
