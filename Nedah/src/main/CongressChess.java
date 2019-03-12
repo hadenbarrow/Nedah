@@ -10,6 +10,7 @@ public class CongressChess {
 	private GameBoardDisplay gameBoardDisplay;
 	private MoveGenerator moveGenerator;
 	private GameBoardInitializer gameBoardInitializer;
+	private GameBoardUpdater gameBoardUpdater;
 	
 	public static final int PAWN = 1;
 	public static final int HORSE = 2;
@@ -34,6 +35,7 @@ public class CongressChess {
 		board = gameBoardInitializer.generateNewBoard();
 		gameBoardDisplay = new GameBoardDisplay();
 		moveGenerator = new MoveGenerator();
+		gameBoardUpdater = new GameBoardUpdater();
 		run = true;
 	}
 	
@@ -94,7 +96,7 @@ public class CongressChess {
 	public void checkMove(String move){}
 	
 	public void updateBoardState(String move){
-		
+		board = gameBoardUpdater.updateBoard(board, move);
 	}
 	
 	public void checkGameOver(){}
@@ -114,7 +116,12 @@ public class CongressChess {
 	}
 	
 	public String getValidMoves(){
-		return "";
+		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		String temp ="";
+		for(String s : playerMoves){
+			temp += s + " ";
+		}
+		return temp;
 	}
 	
 	
