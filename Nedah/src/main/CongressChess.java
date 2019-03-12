@@ -1,5 +1,6 @@
 package main;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CongressChess {
@@ -31,6 +32,7 @@ public class CongressChess {
 		GameBoardInitializer gbi = new GameBoardInitializer();
 		board = gbi.generateNewBoard();
 		gameBoardDisplay = new GameBoardDisplay();
+		moveGenerator = new MoveGenerator();
 		run = true;
 	}
 	
@@ -95,7 +97,13 @@ public class CongressChess {
 	public void checkGameOver(){}
 	
 	public String makeComputerMove(){
-		return "";
+		List<String> computerMoves = moveGenerator.generateComputerMoves(board);
+		System.out.println("Possible computer moves: ");
+		
+		for(String s : computerMoves){
+			System.out.println(s);
+		}
+		return computerMoves.get(0);
 	}
 	
 	public void displayBoard(){
