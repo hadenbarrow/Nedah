@@ -1,6 +1,7 @@
 package main;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class CongressChess {
@@ -87,9 +88,11 @@ public class CongressChess {
 
 		}
 		if(playerWins){
+			System.out.println("Both of Nedahs kings have been captured.");
 			System.out.println("The player wins!");
 		}
 		else if(computerWins){
+			System.out.println("Both of the players kings have been captured.");
 			System.out.println("Nedah wins!");
 		} else{
 			System.out.println("The game is a draw.");
@@ -132,11 +135,11 @@ public class CongressChess {
 			}
 		}
 		if(computerKings == 0){
-			computerWins = true;
+			playerWins = true;
 			run = false;
 		}
 		else if(playerKings == 0){
-			playerWins =  true;
+			computerWins =  true;
 			run = false;
 		}
 	}
@@ -149,8 +152,9 @@ public class CongressChess {
 			System.out.print(s + " ");
 		}
 		System.out.println("");
-		//System.out.println("My move is : " + computerMoves.get(1));
-		return computerMoves.get(1);
+		Random rand = new Random();
+		int selection = rand.nextInt(computerMoves.size());
+		return computerMoves.get(selection);
 	}
 	
 	public void displayBoard(){
