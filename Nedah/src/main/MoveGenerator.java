@@ -1,4 +1,4 @@
-package main;
+package main; 
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +21,62 @@ public class MoveGenerator {
 			for(int j = 0; j < board.length; j++){
 				
 				if(board[i][j] == PIECES.CPAWN.value){
-					if(!checkCollisionWithComputerPiece(board, i+1, j) && isOnBoard(i+1, j)){
-						moves.add(createMoveStringForComputer(i, j, i+1, j));
+					//pawn only has one potential move, moving forward by 1
+					if(!checkCollisionWithComputerPiece(board, i - 1, j) && isOnBoard(i - 1, j)){
+						moves.add(createMoveStringForComputer(i, j, i - 1, j)); 
 					}
 				}
 				
 				else if(board[i][j] == PIECES.CHORSE.value){
+					//check all 8 of the horses potential moves
+					if(!checkCollisionWithComputerPiece(board, i - 1, j - 2) && isOnBoard(i - 1, j - 2)){
+						moves.add(createMoveStringForComputer(i, j, i - 1, j - 2)); 
+					}
 					
+					if(!checkCollisionWithComputerPiece(board, i - 1, j + 2) && isOnBoard(i - 1, j + 2)){
+						moves.add(createMoveStringForComputer(i, j, i - 1, j + 2)); 
+					}
+					
+					if(!checkCollisionWithComputerPiece(board, i - 2, j - 1) && isOnBoard(i - 2, j - 1)){
+						moves.add(createMoveStringForComputer(i, j, i - 2, j - 1)); 
+					}
+					
+					if(!checkCollisionWithComputerPiece(board, i - 2, j + 1) && isOnBoard(i - 2, j + 1)){
+						moves.add(createMoveStringForComputer(i, j, i - 2, j + 1)); 
+					}
+					
+					//check moving backwards, needs to be "senior" to move backwards
+					//For the computer, "senior" is rows 4,5,6
+					if(i >= 4){
+						if(!checkCollisionWithComputerPiece(board, i + 1, j - 2) && isOnBoard(i + 1, j - 2)){
+							moves.add(createMoveStringForComputer(i, j, i + 1, j - 2)); 
+						}
+						
+						if(!checkCollisionWithComputerPiece(board, i + 1, j + 2) && isOnBoard(i + 1, j + 2)){
+							moves.add(createMoveStringForComputer(i, j, i + 1, j + 2)); 
+						}
+						
+						if(!checkCollisionWithComputerPiece(board, i + 2, j - 1) && isOnBoard(i + 2, j - 1)){
+							moves.add(createMoveStringForComputer(i, j, i + 2, j - 1)); 
+						}
+						
+						if(!checkCollisionWithComputerPiece(board, i + 2, j + 1) && isOnBoard(i + 2, j + 1)){
+							moves.add(createMoveStringForComputer(i, j, i + 2, j + 2)); 
+						}
+					}
 				} 
+				
 				else if(board[i][j] == PIECES.CBISHOP.value){
+					if(!checkCollisionWithComputerPiece(board, i+1, j) && isOnBoard(i+1, j)){
+						moves.add(createMoveStringForComputer(i, j, i+1, j));
+					}
 					
 				}
+				
 				else if(board[i][j] == PIECES.CKING.value){
+					if(!checkCollisionWithComputerPiece(board, i+1, j) && isOnBoard(i+1, j)){
+						moves.add(createMoveStringForComputer(i, j, i+1, j));
+					}
 					
 				}
 			}
@@ -49,7 +93,7 @@ public class MoveGenerator {
 	
 	public String getCorrespondingColumn(int n){
 		if(n > 8 || n < 1){
-			return "";
+			return "column doesn't make sense";
 		}
 		if(n == 1){return "a";} 
 		else if(n == 2){return "b";}
