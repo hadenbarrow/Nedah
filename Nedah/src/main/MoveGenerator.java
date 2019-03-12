@@ -68,36 +68,8 @@ public class MoveGenerator {
 				
 				else if(board[i][j] == PIECES.CBISHOP.value){
 					//check forward moves
-					if(!checkCollisionWithComputerPiece(board, i + 1 , j + 1) && isOnBoard(i + 1, j + 1)){
-						moves.add(createMoveStringForComputer(i, j, i + 1, j + 1));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 2 , j + 2) && isOnBoard(i + 2, j + 2)){
-						moves.add(createMoveStringForComputer(i, j, i + 2, j + 2));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 3 , j + 3) && isOnBoard(i + 3, j + 3)){
-						moves.add(createMoveStringForComputer(i, j, i + 3, j + 3));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 4 , j + 4) && isOnBoard(i + 4, j + 4)){
-						moves.add(createMoveStringForComputer(i, j, i + 4, j + 4));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 5 , j + 5) && isOnBoard(i + 5, j + 5)){
-						moves.add(createMoveStringForComputer(i, j, i + 5, j + 5));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 1 , j - 1) && isOnBoard(i + 1, j - 1)){
-						moves.add(createMoveStringForComputer(i, j, i + 1, j - 1));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 2 , j - 2) && isOnBoard(i + 2, j - 2)){
-						moves.add(createMoveStringForComputer(i, j, i + 2, j - 2));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 3 , j - 3) && isOnBoard(i + 3, j - 3)){
-						moves.add(createMoveStringForComputer(i, j, i + 3, j - 3));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 4 , j  - 4) && isOnBoard(i + 4, j - 4)){
-						moves.add(createMoveStringForComputer(i, j, i + 4, j- 4));
-					}
-					if(!checkCollisionWithComputerPiece(board, i + 5 , j - 5) && isOnBoard(i + 5, j - 5)){
-						moves.add(createMoveStringForComputer(i, j, i + 5, j - 5));
-					}
+					moves.addAll(checkForwardRightDiagonal(i,j, board));
+					moves.addAll(checkForwardLeftDiagonal(i,j, board));
 					
 					//check backwards moves
 					if(i <= 3){
@@ -151,6 +123,28 @@ public class MoveGenerator {
 					
 				}
 			}
+		}
+		return moves;
+	}
+	
+	public List<String> checkForwardRightDiagonal(int i, int j, int[][] board){
+		List<String> moves = new ArrayList<String>();
+		int newi = i + 1;
+		int newj = j + 1;
+		if(!checkCollisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+			moves.add(createMoveStringForComputer(i,j,newi,newj));
+			checkForwardRightDiagonal(newi, newj, board);
+		}
+		return moves;
+	}
+	
+	public List<String> checkForwardLeftDiagonal(int i, int j, int[][] board){
+		List<String> moves = new ArrayList<String>();
+		int newi = i + 1;
+		int newj = j - 1;
+		if(!checkCollisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+			moves.add(createMoveStringForComputer(i,j,newi,newj));
+			checkForwardRightDiagonal(newi, newj, board);
 		}
 		return moves;
 	}
