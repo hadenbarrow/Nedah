@@ -9,7 +9,31 @@ public class GameBoardUpdater {
 		
 		int piece = removeFromOldPos(newBoard, oldPos);
 		moveToNewPos(newBoard, piece, newPos);
+		checkPiecesForTypeUpdate(board);
 		return newBoard;
+	}
+	
+	private void checkPiecesForTypeUpdate(int[][] board){
+		for(int i =0; i < board.length; i++){
+			for(int j = 0; j < board[0].length; j++){
+				if(j <= 3){
+					if(board[i][j] == PIECES.BISHOP.value){
+						board[i][j] = PIECES.HORSE.value;
+					}
+					
+					if(board[i][j] == PIECES.CBISHOP.value){
+						board[i][j] = PIECES.CHORSE.value;
+					}
+				} else{
+					if(board[i][j] == PIECES.HORSE.value){
+						board[i][j] = PIECES.BISHOP.value;
+					}
+					if(board[i][j] == PIECES.CHORSE.value){
+						board[i][j] = PIECES.CBISHOP.value;
+					}
+				}
+			}
+		}
 	}
 	
 	private int removeFromOldPos(int[][] board, String oldPos){
