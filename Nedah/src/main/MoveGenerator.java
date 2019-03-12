@@ -69,7 +69,7 @@ public class MoveGenerator {
 		int newj = j - 1;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
-			checkPlayerBackwardLeftBishopMoves(board, newi, newj);
+			moves.addAll(checkPlayerBackwardLeftBishopMoves(board, newi, newj));
 		}
 		
 		return moves;
@@ -81,7 +81,7 @@ public class MoveGenerator {
 		int newj = j + 1;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
-			checkPlayerBackwardRightBishopMoves(board, newi, newj);
+			moves.addAll(checkPlayerBackwardRightBishopMoves(board, newi, newj));
 		}
 		
 		return moves;
@@ -93,7 +93,7 @@ public class MoveGenerator {
 		int newj = j + 1;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
-			checkPlayerForwardRightBishopMoves(board, newi, newj);
+			moves.addAll(checkPlayerForwardRightBishopMoves(board, newi, newj));
 		}
 		
 		return moves;
@@ -105,7 +105,7 @@ public class MoveGenerator {
 		int newj = j - 1;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
-			checkPlayerForwardLeftBishopMoves(board, newi, newj);
+			moves.addAll(checkPlayerForwardLeftBishopMoves(board, newi, newj));
 		}
 		
 		return moves;
