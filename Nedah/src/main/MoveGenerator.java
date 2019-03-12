@@ -67,9 +67,12 @@ public class MoveGenerator {
 		List<String> moves = new ArrayList<String>();
 		int newi = i - 1;
 		int newj = j - 1;
-		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
-			moves.add(createMoveString(i, j, newi, newj));
-			moves.addAll(checkPlayerBackwardLeftBishopMoves(board, newi, newj));
+		for(int k = 0; k < 4; k++){
+			if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+				moves.add(createMoveString(i, j, newi, newj));
+			}
+			newi--;
+			newj--;
 		}
 		
 		return moves;
@@ -79,9 +82,12 @@ public class MoveGenerator {
 		List<String> moves = new ArrayList<String>();
 		int newi = i - 1;
 		int newj = j + 1;
-		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
-			moves.add(createMoveString(i, j, newi, newj));
-			moves.addAll(checkPlayerBackwardRightBishopMoves(board, newi, newj));
+		for(int k = 0; k < 4; k++){
+			if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+				moves.add(createMoveString(i, j, newi, newj));
+			}
+			newi--;
+			newj++;
 		}
 		
 		return moves;
@@ -91,11 +97,13 @@ public class MoveGenerator {
 		List<String> moves = new ArrayList<String>();
 		int newi = i + 1;
 		int newj = j + 1;
-		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
-			moves.add(createMoveString(i, j, newi, newj));
-			moves.addAll(checkPlayerForwardRightBishopMoves(board, newi, newj));
+		for(int k = 0; k < 4; k++){
+			if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+				moves.add(createMoveString(i, j, newi, newj));
+			}
+			newi++;
+			newj++;
 		}
-		
 		return moves;
 	}
 	
@@ -103,16 +111,14 @@ public class MoveGenerator {
 		List<String> moves = new ArrayList<String>();
 		int newi = i + 1;
 		int newj = j - 1;
-		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
-			moves.add(createMoveString(i, j, newi, newj));
-			moves.addAll(checkPlayerForwardLeftBishopMoves(board, newi, newj));
+		for(int k = 0; k < 4; k++){
+			if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+				moves.add(createMoveString(i, j, newi, newj));
+			}
+			newi++;
+			newj--;
 		}
 		
-		return moves;
-	}
-	
-	private List<String> checkPlayerBackwardBishopMoves(int[][] board, int i, int j){
-		List<String> moves = new ArrayList<String>();
 		return moves;
 	}
 	
