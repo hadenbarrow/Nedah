@@ -14,8 +14,7 @@ public class GameBoardUpdater {
 	
 	private int removeFromOldPos(int[][] board, String oldPos){
 		int column = getColumn(oldPos.substring(0,1));
-		int row = Integer.parseInt(oldPos.substring(1));
-		System.out.println("Row:" + row + " Column: " + column);
+		int row = Integer.parseInt(oldPos.substring(1))-1;
 		int piece = board[row][column];
 		board[row][column] = 0;
 		return piece;
@@ -23,8 +22,8 @@ public class GameBoardUpdater {
 	
 	private void moveToNewPos(int[][] board, int piece, String newPos){
 		int column = getColumn(newPos.substring(0,1));
-		int row = Integer.parseInt(newPos.substring(1));
-		
+		int row = Integer.parseInt(newPos.substring(1))-1;
+
 		board[row][column] = piece;
 	}
 	
@@ -36,6 +35,7 @@ public class GameBoardUpdater {
 		else if(s.equals("e")){return 4;}
 		else if(s.equals("f")){return 5;}
 		else if(s.equals("g")){return 6;}
+		else if(s.equals("h")){return 7;}
 		return -1;
 	}
 }

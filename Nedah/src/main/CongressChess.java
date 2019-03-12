@@ -4,24 +4,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CongressChess {
-	private boolean run, computerTurn;
+	private boolean run, computerTurn, illegalMoveFlag, playerWins, computerWins;
 	private int[][] board;
 	private Scanner scanner;
 	private GameBoardDisplay gameBoardDisplay;
 	private MoveGenerator moveGenerator;
 	private GameBoardInitializer gameBoardInitializer;
 	private GameBoardUpdater gameBoardUpdater;
-	
-	public static final int PAWN = 1;
-	public static final int HORSE = 2;
-	public static final int BISHOP = 3;
-	public static final int KING = 4;
-	
-	public static final int CPAWN = 5;
-	public static final int CHORSE = 6;
-	public static final int CBISHOP = 7;
-	public static final int CKING = 8;
-	
 	
 	public CongressChess(){
 		init();
@@ -36,6 +25,7 @@ public class CongressChess {
 		gameBoardDisplay = new GameBoardDisplay();
 		moveGenerator = new MoveGenerator();
 		gameBoardUpdater = new GameBoardUpdater();
+		illegalMoveFlag = false;
 		run = true;
 	}
 	
@@ -60,13 +50,19 @@ public class CongressChess {
 				updateBoardState(move);
 				checkGameOver();
 				displayBoard();
+				System.out.println("My move is : " + move);
 				computerTurn = false;
 			} else {
 				String userMove = promptUserForMove();
-				checkMove(userMove);
+				illegalMoveFlag = checkMove(userMove);
+				while(illegalMoveFlag){
+					userMove = promptUserForMove();
+					illegalMoveFlag = checkMove(userMove);
+				}
 				updateBoardState(userMove);
 				checkGameOver();
 				displayBoard();
+				computerTurn = true;
 			}
 			
 			if(computerTurn){
@@ -74,41 +70,87 @@ public class CongressChess {
 				updateBoardState(move);
 				checkGameOver();
 				displayBoard();
+				System.out.println("My move is : " + move);
 				computerTurn = false;
 			} else {
 				String userMove = promptUserForMove();
-				checkMove(userMove);
+				illegalMoveFlag = checkMove(userMove);
+				while(illegalMoveFlag){
+					userMove = promptUserForMove();
+					illegalMoveFlag = checkMove(userMove);
+				}
 				updateBoardState(userMove);
 				checkGameOver();
 				displayBoard();
+				computerTurn = true;
 			}
 
+		}
+		if(playerWins){
+			System.out.println("The player wins!");
+		}
+		else if(computerWins){
+			System.out.println("Nedah wins!");
+		} else{
+			System.out.println("The game is a draw.");
 		}
 	}
 	
 	public String promptUserForMove(){
 		String validMoves = getValidMoves();
-		System.out.println("Valid moves are: " + validMoves);
+		System.out.println("Valid moves for player: " + validMoves);
 		System.out.println("Enter your move: ");
 		return scanner.nextLine();
 	}
 	
-	public void checkMove(String move){}
+	public boolean checkMove(String move){
+		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		if(!playerMoves.contains(move)){
+			System.err.println("That move is not valid");
+			System.out.println("");
+			return true;
+		}
+		return false;
+	}
 	
 	public void updateBoardState(String move){
 		board = gameBoardUpdater.updateBoard(board, move);
 	}
 	
-	public void checkGameOver(){}
+	public void checkGameOver(){
+		int computerKings = 0;
+		int playerKings = 0;
+		
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board[0].length; j++){
+				if(board[i][j] == PIECES.KING.value){
+					playerKings++;
+				}
+				if(board[i][j] == PIECES.CKING.value){
+					computerKings++;
+				}
+			}
+		}
+		if(computerKings == 0){
+			computerWins = true;
+			run = false;
+		}
+		else if(playerKings == 0){
+			playerWins =  true;
+			run = false;
+		}
+	}
 	
 	public String makeComputerMove(){
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
-		System.out.println("Possible computer moves: ");
+		System.out.print("Valid moves for Nedah: ");
 		
 		for(String s : computerMoves){
-			System.out.println(s);
+			System.out.print(s + " ");
 		}
-		return computerMoves.get(0);
+		System.out.println("");
+		//System.out.println("My move is : " + computerMoves.get(1));
+		return computerMoves.get(1);
 	}
 	
 	public void displayBoard(){
