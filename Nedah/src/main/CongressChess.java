@@ -97,7 +97,7 @@ public class CongressChess {
 	public void checkGameOver(){}
 	
 	public String makeComputerMove(){
-		List<String> computerMoves = moveGenerator.generateComputerMoves(board);
+		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
 		System.out.println("Possible computer moves: ");
 		
 		for(String s : computerMoves){
