@@ -1,7 +1,6 @@
 package main;
 
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 public class CongressChess {
@@ -12,6 +11,7 @@ public class CongressChess {
 	private MoveGenerator moveGenerator;
 	private GameBoardInitializer gameBoardInitializer;
 	private GameBoardUpdater gameBoardUpdater;
+	private int maxDepth;
 	
 	public CongressChess(){
 		init();
@@ -27,6 +27,7 @@ public class CongressChess {
 		moveGenerator = new MoveGenerator();
 		gameBoardUpdater = new GameBoardUpdater();
 		illegalMoveFlag = false;
+		maxDepth = 5;
 		run = true;
 	}
 	
@@ -134,6 +135,7 @@ public class CongressChess {
 				}
 			}
 		}
+		
 		if(computerKings == 0){
 			playerWins = true;
 			run = false;
@@ -155,9 +157,9 @@ public class CongressChess {
 			System.out.print(s + " ");
 		}
 		System.out.println("");
-		Random rand = new Random();
-		int selection = rand.nextInt(computerMoves.size());
-		return computerMoves.get(selection);
+		
+		
+		return startMinimax(board, maxDepth, true);
 	}
 	
 	private void displayBoard(){
@@ -173,12 +175,69 @@ public class CongressChess {
 		return temp;
 	}
 	
-	
-	private int minimax(int[][] board, int depth, boolean maximizingPlayer){
-		if(depth == 0 || checkGameOver(board)){
-			return eval(board);
+	public String startMinimax(int[][] board, int depth, boolean computerTurn) {
+		List<String> moves = moveGenerator.generateMoves("computer", board);
+		int score = 0;
+		int best = -5000;
+		String move = moves.get(0);
+		for(String s : moves) {
+			int[][] oldBoard = board;
+			gameBoardUpdater.updateBoard(board, s);
+			score = minimax(board, depth, false);
+			if(score > best) {
+				best = score;
+				move = s;
+			}
+			board = oldBoard;
 		}
-		return 0;
+		return move;
+	}
+	
+	public int minimax(int[][] board, int depth, boolean computerTurn) {
+		if(depth == 0 || checkForWinner(board) != -1) return eval(board);
+		
+		if(computerTurn) {
+			int maxEval = -5000;
+			List<String> moves = moveGenerator.generateMoves("computer", board);
+			for(String s : moves) {
+				int eval = minimax(gameBoardUpdater.updateBoard(board, s), depth - 1, false);
+				maxEval = Math.max(eval, maxEval);
+			}
+			return maxEval;
+		} else {
+			int minEval = 5000;
+			List<String> moves = moveGenerator.generateMoves("player", board);
+			for(String s : moves) {
+				int eval = minimax(gameBoardUpdater.updateBoard(board, s), depth - 1, true);
+				minEval = Math.min(eval, minEval);
+			}
+			return minEval;
+		}
+	}
+
+	
+	private int checkForWinner(int[][] board) {
+		int computerKings = 0;
+		int playerKings = 0;
+		
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board[0].length; j++){
+				if(board[i][j] == PIECES.KING.value){
+					playerKings++;
+				}
+				if(board[i][j] == PIECES.CKING.value){
+					computerKings++;
+				}
+			}
+		}
+		if(computerKings == 0) {
+			return -5000;
+		}
+		else if(playerKings == 0) {
+			return 5000;
+		} else {
+			return -1;
+		}
 	}
 	
 	private int eval(int[][] board){

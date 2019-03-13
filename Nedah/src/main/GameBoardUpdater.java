@@ -9,7 +9,7 @@ public class GameBoardUpdater {
 		
 		int piece = removeFromOldPos(newBoard, oldPos);
 		moveToNewPos(newBoard, piece, newPos);
-		checkPiecesForTypeUpdate(board);
+		checkPiecesForTypeUpdate(newBoard);
 		return newBoard;
 	}
 	
