@@ -183,25 +183,25 @@ public class MoveGenerator {
 	private List<String> checkPlayerBackwardHorseMoves(int[][] board, int i, int j){
 		List<String> moves = new ArrayList<String>();
 		
-		int newi = i - 1;
+		int newi = i + 1;
 		int newj = j + 2;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
-		newi = i - 1;
+		newi = i + 1;
 		newj = j - 2;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
-		newi = i - 2;
+		newi = i + 2;
 		newj = j + 1;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
-		newi = i - 2;
+		newi = i + 2;
 		newj = j - 1;
 		if(!checkCollisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
 			moves.add(createMoveString(i, j, newi, newj));

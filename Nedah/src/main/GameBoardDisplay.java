@@ -5,7 +5,7 @@ public class GameBoardDisplay {
 	public GameBoardDisplay(){}
 	
 	public void displayBoard(int[][] board){
-		System.out.println("\n\n\n");
+		System.out.println("\n");
 		System.out.println("-------------------- Computer");
 		for(int i = 0; i < board.length; i++){
 			System.out.print(i+1+ "  "); //label the rows

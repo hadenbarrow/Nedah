@@ -4,13 +4,23 @@ public class GameBoardUpdater {
 	
 	public int[][] updateBoard(int[][] board, String move){
 		int[][] newBoard = board;
+		if(!(move.length() < 4)) {
+			String oldPos = move.substring(0,2);
+			String newPos = move.substring(2);
+			
+			int piece = removeFromOldPos(newBoard, oldPos);
+			moveToNewPos(newBoard, piece, newPos);
+			checkPiecesForTypeUpdate(newBoard);
+			return newBoard;
+		} else {
+			return board;
+		}
+	}
+	
+	public String getReverseMove(String move) {
 		String oldPos = move.substring(0,2);
 		String newPos = move.substring(2);
-		
-		int piece = removeFromOldPos(newBoard, oldPos);
-		moveToNewPos(newBoard, piece, newPos);
-		checkPiecesForTypeUpdate(newBoard);
-		return newBoard;
+		return newPos+oldPos;
 	}
 	
 	private void checkPiecesForTypeUpdate(int[][] board){
