@@ -3,12 +3,10 @@ package main;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class CongressChess {
 	private boolean run, computerTurn, illegalMoveFlag, playerWinsByKings, computerWinsByKings, playerWinsByMoves, computerWinsByMoves;
 	private int[][] board;
-	private int[][] backupBoard;
 	private Scanner scanner;
 	private GameBoardDisplay gameBoardDisplay;
 	private MoveGenerator moveGenerator;
@@ -26,7 +24,6 @@ public class CongressChess {
 		scanner = new Scanner(System.in);
 		gameBoardInitializer = new GameBoardInitializer();
 		board = gameBoardInitializer.generateNewBoard();
-		backupBoard = board;
 		gameBoardDisplay = new GameBoardDisplay();
 		moveGenerator = new MoveGenerator();
 		gameBoardUpdater = new GameBoardUpdater();
@@ -190,75 +187,8 @@ public class CongressChess {
 		System.out.println("Searched " + searchTask.getDepth() + " plys in " + timeElapsed + " seconds");
 		return searchTask.getMove();
 	}
-	
-	/*
-	private String getComputerMove(){
-		maxDepth = 3;
-		String bestMove = "";
-		long startTime = System.currentTimeMillis()/1000;
-		long elapsedTime = 0;
-		while(elapsedTime < 5) {
-			int[][] newBoard = copyBoard(board);
-			int best = -5000, depth = 0, score = 0;
-			String move = "";
-			List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
-			for(String s : computerMoves) {
-				newBoard = copyBoard(board);
-				newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
-				score = min(newBoard, depth+1);
-				if(score > best) {
-					best = score;
-					move = s;
-				}
-			}
-			bestMove = move;
-			maxDepth++;
-			elapsedTime = (System.currentTimeMillis()/1000) - startTime;
-		}
-		System.out.println("Searched " + maxDepth + " plys in " + elapsedTime + " seconds");
-		return bestMove;
-	}
-	*/
-	
-	private int min(int[][] board, int depth) {
-		int best = 5000, score = 0;
-		
-		if(checkForWinner(board) != -1) {return checkForWinner(board);}
-		if(depth == maxDepth) {return eval(board);}
-		
-		List<String> playerMoves = moveGenerator.generateMoves("player", board);
-		for(String s : playerMoves) {
-			int[][] oldBoard = copyBoard(board);
-			board = gameBoardUpdater.updateBoard(board, s);
-			score = max(board, depth+1);
-			if(score < best) {
-				best = score;
-			}
-			board = oldBoard;
-		}
-		return best;
-	}
-	
-	private int max(int[][] board, int depth) {
-		int best = -5000, score = 0;
-		
-		if(checkForWinner(board) != -1) {return checkForWinner(board);}
-		if(depth == maxDepth) {return eval(board);}
-		
-		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
-		for(String s : computerMoves) {
-			int[][] oldBoard = copyBoard(board);
-			board = gameBoardUpdater.updateBoard(board, s);
-			score = min(board, depth+1);
-			if(score > best) {
-				best = score;
-			}
-			board = oldBoard;
-		}
-		return best;
-	}
-	
-	
+
+
 	private void displayBoard(){
 		gameBoardDisplay.displayBoard(board);
 	}
@@ -270,85 +200,6 @@ public class CongressChess {
 			temp += s + " ";
 		}
 		return temp;
-	}
-		
-	private int checkForWinner(int[][] board) {
-		int computerKings = 0;
-		int playerKings = 0;
-		
-		for(int i = 0; i < board.length; i++){
-			for(int j = 0; j < board[0].length; j++){
-				if(board[i][j] == PIECES.KING.value){
-					playerKings++;
-				}
-				if(board[i][j] == PIECES.CKING.value){
-					computerKings++;
-				}
-			}
-		}
-		if(computerKings == 0) {
-			return -5000;
-		}
-		else if(playerKings == 0) {
-			return 5000;
-		} else {
-			return -1;
-		}
-	}
-	
-	private int eval(int[][] board){
-		int computerMaterial = getComputerMaterial(board);
-		int playerMaterial = getPlayerMaterial(board);
-		
-		return computerMaterial - playerMaterial;
-	}
-	
-	private int getComputerMaterial(int[][] board){
-		int computerMaterial = 0;
-		for(int i = 0; i < board.length; i++){
-			for(int j = 0; j < board[0].length; j++){
-				int piece = board[i][j];
-				if(piece == PIECES.CPAWN.value){
-					computerMaterial += 1;
-				}
-				else if(piece == PIECES.CBISHOP.value){
-					computerMaterial += 3;
-				}
-				else if(piece == PIECES.CHORSE.value){
-					computerMaterial += 3;
-				}
-			}
-		}
-		return computerMaterial;
-	}
-	
-	private int getPlayerMaterial(int[][] board){
-		int playerMaterial = 0;
-		for(int i = 0; i < board.length; i++){
-			for(int j = 0; j < board[0].length; j++){
-				int piece = board[i][j];
-				if(piece == PIECES.PAWN.value){
-					playerMaterial += 1;
-				}
-				else if(piece == PIECES.BISHOP.value){
-					playerMaterial += 3;
-				}
-				else if(piece == PIECES.HORSE.value){
-					playerMaterial += 3;
-				}
-			}
-		}
-		return playerMaterial;
-	}
-	
-	private int[][] copyBoard(int[][] board) {
-		int[][] copy = new int[6][8];
-		for(int i = 0; i < board.length; i++) {
-			for(int j = 0; j < board[0].length; j++) {
-				copy[i][j] = board[i][j];
-			}
-		}
-		return copy;
 	}
 		
 	public static void main(String[] args){
