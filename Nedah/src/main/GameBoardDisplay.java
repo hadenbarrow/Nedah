@@ -8,7 +8,7 @@ public class GameBoardDisplay {
 		System.out.println("\n");
 		System.out.println("-------------------- Computer");
 		for(int i = 0; i < board.length; i++){
-			System.out.print(i+1+ "  "); //label the rows
+			System.out.print(6-i+ "  "); //label the rows
 			for(int j = 0; j < board[0].length ; j++){
 				System.out.print(pieceLookup(board[i][j]) + " ");
 			}

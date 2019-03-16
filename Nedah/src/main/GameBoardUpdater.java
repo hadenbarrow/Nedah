@@ -47,21 +47,22 @@ public class GameBoardUpdater {
 	}
 	
 	private int removeFromOldPos(int[][] board, String oldPos){
-		int column = getColumn(oldPos.substring(0,1));
-		int row = Integer.parseInt(oldPos.substring(1))-1;
+		int row = translateRow(oldPos.substring(1)) - 1;
+		int column = translateColumn(oldPos.substring(0,1));
+		
 		int piece = board[row][column];
 		board[row][column] = 0;
 		return piece;
 	}
 	
 	private void moveToNewPos(int[][] board, int piece, String newPos){
-		int column = getColumn(newPos.substring(0,1));
-		int row = Integer.parseInt(newPos.substring(1))-1;
+		int column = translateColumn(newPos.substring(0,1));
+		int row = translateRow(newPos.substring(1)) - 1;
 
 		board[row][column] = piece;
 	}
 	
-	private int getColumn(String s){
+	private int translateColumn(String s){
 		if(s.equals("a")){return 0;}
 		else if(s.equals("b")){return 1;}
 		else if(s.equals("c")){return 2;}
@@ -71,5 +72,48 @@ public class GameBoardUpdater {
 		else if(s.equals("g")){return 6;}
 		else if(s.equals("h")){return 7;}
 		return -1;
+	}
+	
+	private int translateRow(String row) {
+		if(row.equals("6")) {
+			return 1;
+		}
+		else if(row.equals("5")) {
+			return 2;
+		}
+		else if(row.equals("4")) {
+			return 3;
+		}
+		else if(row.equals("3")) {
+			return 4;
+		}
+		else if(row.equals("2")) {
+			return 5;
+		}
+		else if(row.equals("1")) {
+			return 6;
+		} else {
+			return -1;
+		}		
+	}
+	
+	public static void main(String[] args) {
+		GameBoardInitializer gbi = new GameBoardInitializer();
+		GameBoardDisplay gbd = new GameBoardDisplay();
+		GameBoardUpdater gbu = new GameBoardUpdater();
+
+		int[][] board = gbi.generateNewBoard();
+		gbd.displayBoard(board);
+		gbu.updateBoard(board, "b2b3");
+		System.out.println("\nplaying b2b3");
+		gbd.displayBoard(board);
+		
+		gbu.updateBoard(board, "c5c4");
+		System.out.println("\nplaying c5c4");
+		gbd.displayBoard(board);
+		
+		gbu.updateBoard(board, "a6b4");
+		System.out.println("\nplaying a6b4");
+		gbd.displayBoard(board);
 	}
 }

@@ -23,8 +23,7 @@ public class Search extends Thread{
 	}
 	
 	private void getComputerMove(){
-		maxDepth = 3;
-		while(true) {
+		while(true) { //iterative deepening
 			int[][] newBoard = copyBoard(board);
 			int best = -5000, depth = 0, score = 0;
 			String move = "";
@@ -39,7 +38,7 @@ public class Search extends Thread{
 				}
 			}
 			threadMove = move;
-			maxDepth++;
+			maxDepth++; //deepen search by 1
 		}
 	}
 	

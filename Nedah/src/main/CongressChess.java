@@ -185,6 +185,7 @@ public class CongressChess {
 		}
 		long timeElapsed = (System.currentTimeMillis()/1000) - startTime;
 		System.out.println("Searched " + searchTask.getDepth() + " plys in " + timeElapsed + " seconds");
+		System.out.println("Searched " + searchTask.getLeafNodes() + " leaf nodes.");
 		return searchTask.getMove();
 	}
 
