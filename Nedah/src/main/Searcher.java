@@ -6,6 +6,7 @@ public class Searcher extends TimerTask {
 	Search searchThread;
 	String move;
 	int depth;
+	int leafNodes;
 
 	public Searcher(int[][] board) {
 		move = "";
@@ -18,6 +19,7 @@ public class Searcher extends TimerTask {
 	public void run() {
  		move = searchThread.getThreadsMove();
 		depth = searchThread.getDepth();
+		leafNodes = searchThread.getLeafNodes();
 	}
 
 	public String getMove() {
@@ -26,6 +28,10 @@ public class Searcher extends TimerTask {
 
 	public int getDepth() {
 		return depth;
+	}
+	
+	public int getLeafNodes() {
+		return leafNodes;
 	}
 
 }

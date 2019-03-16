@@ -6,11 +6,14 @@ public class Search extends Thread{
 	private volatile String threadMove;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveGenerator moveGenerator;
-	private volatile int maxDepth = 1;
+	private volatile int maxDepth;
+	private int leafNodes;
 	private int[][] board;
 	
 	public Search(int[][] board) {
 		this.board = board;
+		maxDepth = 1;
+		leafNodes = 0;
 		gameBoardUpdater = new GameBoardUpdater();
 		moveGenerator = new MoveGenerator();
 	}
@@ -106,6 +109,7 @@ public class Search extends Thread{
 		int computerMaterial = getComputerMaterial(board);
 		int playerMaterial = getPlayerMaterial(board);
 		
+		leafNodes++;
 		return computerMaterial - (playerMaterial - depth);
 	}
 	
@@ -113,6 +117,7 @@ public class Search extends Thread{
 		int computerMaterial = getComputerMaterial(board);
 		int playerMaterial = getPlayerMaterial(board);
 		
+		leafNodes++;
 		return computerMaterial - (playerMaterial + depth);
 	}
 	
@@ -176,5 +181,9 @@ public class Search extends Thread{
 	
 	public int getDepth() {
 		return maxDepth;
+	}
+	
+	public int getLeafNodes() {
+		return leafNodes;
 	}
 }
