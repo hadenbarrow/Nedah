@@ -12,7 +12,7 @@ public class CongressChess {
 	private MoveGenerator moveGenerator;
 	private GameBoardInitializer gameBoardInitializer;
 	private GameBoardUpdater gameBoardUpdater;
-	private int maxDepth;
+	private MoveTranslator moveTranslator;
 	
 	public CongressChess(){
 		init();
@@ -27,8 +27,8 @@ public class CongressChess {
 		gameBoardDisplay = new GameBoardDisplay();
 		moveGenerator = new MoveGenerator();
 		gameBoardUpdater = new GameBoardUpdater();
+		moveTranslator = new MoveTranslator();
 		illegalMoveFlag = false;
-		maxDepth = 3;
 		run = true;
 	}
 	
@@ -50,7 +50,7 @@ public class CongressChess {
 		while(run){
 			if(computerTurn){
 				String computerMove = getComputerMove();
-				System.out.println("Nedah's move is: " + computerMove);
+				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
 				checkGameOver(board);
 				displayBoard();
@@ -70,7 +70,7 @@ public class CongressChess {
 			
 			if(computerTurn){
 				String computerMove = getComputerMove();
-				System.out.println("Nedah's move is: " + computerMove);
+				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
 				checkGameOver(board);
 				displayBoard();
