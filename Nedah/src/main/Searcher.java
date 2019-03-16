@@ -33,5 +33,9 @@ public class Searcher extends TimerTask {
 	public int getLeafNodes() {
 		return leafNodes;
 	}
+	
+	public void closeThread() {
+		searchThread.stopSearch();
+	}
 
 }

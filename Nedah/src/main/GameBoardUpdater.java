@@ -58,8 +58,10 @@ public class GameBoardUpdater {
 	private void moveToNewPos(int[][] board, int piece, String newPos){
 		int column = translateColumn(newPos.substring(0,1));
 		int row = translateRow(newPos.substring(1)) - 1;
-
-		board[row][column] = piece;
+		
+		if(isOnBoard(row, column)) {
+			board[row][column] = piece;
+		}
 	}
 	
 	private int translateColumn(String s){
@@ -115,5 +117,9 @@ public class GameBoardUpdater {
 		gbu.updateBoard(board, "a6b4");
 		System.out.println("\nplaying a6b4");
 		gbd.displayBoard(board);
+	}
+	
+	private boolean isOnBoard(int i, int j) {
+		return ((i < 6 && j < 8) && (i > -1 && j > -1));
 	}
 }

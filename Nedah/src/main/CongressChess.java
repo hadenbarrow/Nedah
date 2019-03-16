@@ -52,7 +52,7 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				checkGameOver(board);
+				if (checkGameOver(board)) {break;};
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -72,7 +72,7 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				checkGameOver(board);
+				if (checkGameOver(board)) {break;};
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -186,7 +186,9 @@ public class CongressChess {
 		long timeElapsed = (System.currentTimeMillis()/1000) - startTime;
 		System.out.println("Searched " + searchTask.getDepth() + " plys in " + timeElapsed + " seconds");
 		System.out.println("Searched " + searchTask.getLeafNodes() + " leaf nodes.");
-		return searchTask.getMove();
+		String move = searchTask.getMove();
+		searchTask.closeThread();
+		return move;
 	}
 
 

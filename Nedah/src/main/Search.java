@@ -9,6 +9,7 @@ public class Search extends Thread{
 	private volatile int maxDepth;
 	private int leafNodes;
 	private int[][] board;
+	private boolean running;
 	
 	public Search(int[][] board) {
 		this.board = board;
@@ -16,6 +17,7 @@ public class Search extends Thread{
 		leafNodes = 0;
 		gameBoardUpdater = new GameBoardUpdater();
 		moveGenerator = new MoveGenerator();
+		running = true;
 	}
 	
 	public void run() {
@@ -23,7 +25,7 @@ public class Search extends Thread{
 	}
 	
 	private void getComputerMove(){
-		while(true) { //iterative deepening
+		while(running) { //iterative deepening
 			int[][] newBoard = copyBoard(board);
 			int best = -5000, depth = 0, score = 0;
 			String move = "";
@@ -184,5 +186,9 @@ public class Search extends Thread{
 	
 	public int getLeafNodes() {
 		return leafNodes;
+	}
+	
+	public void stopSearch() {
+		running = false;
 	}
 }
