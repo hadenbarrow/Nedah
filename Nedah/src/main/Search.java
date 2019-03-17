@@ -33,7 +33,7 @@ public class Search extends Thread{
 			for(String s : computerMoves) {
 				newBoard = copyBoard(board);
 				newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
-				score = min(newBoard, depth+1);
+				score = min(newBoard, depth+1, -5000, 5000);
 				if(score > best) {
 					best = score;
 					move = s;
@@ -44,7 +44,7 @@ public class Search extends Thread{
 		}
 	}
 	
-	private int min(int[][] board, int depth) {
+	private int min(int[][] board, int depth, int a, int b) {
 		int best = 5000, score = 0;
 		
 		if(checkForWinner(board) != -1) {return checkForWinner(board);}
@@ -54,16 +54,22 @@ public class Search extends Thread{
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
-			score = max(board, depth+1);
+			score = max(board, depth+1, a, b);
 			if(score < best) {
 				best = score;
+			}
+			if(score <= a) {
+				return best;
+			}
+			if(score < b) {
+				b = score;
 			}
 			board = oldBoard;
 		}
 		return best;
 	}
 	
-	private int max(int[][] board, int depth) {
+	private int max(int[][] board, int depth, int a, int b) {
 		int best = -5000, score = 0;
 		
 		if(checkForWinner(board) != -1) {return checkForWinner(board);}
@@ -73,9 +79,15 @@ public class Search extends Thread{
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
-			score = min(board, depth+1);
+			score = min(board, depth+1, a, b);
 			if(score > best) {
 				best = score;
+			}
+			if(score >= b) {
+				return best;
+			}
+			if(score > a) {
+				a = score;
 			}
 			board = oldBoard;
 		}
