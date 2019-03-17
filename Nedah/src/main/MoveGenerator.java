@@ -214,7 +214,7 @@ public class MoveGenerator {
 			if(collisionWithPlayerPiece(board, newi, newj)){
 				break;
 			}
-			if(!collisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+			if(!collisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj) && collisionWithComputerPiece(board, newi, newj)){
 				moves.add(createMoveString(i, j, newi, newj));
 				if(collisionWithComputerPiece(board, newi, newj)){
 					break;
@@ -232,7 +232,7 @@ public class MoveGenerator {
 			if(collisionWithPlayerPiece(board, newi, newj)){
 				break;
 			}
-			if(!collisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+			if(!collisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj)&& collisionWithComputerPiece(board, newi, newj)){
 				moves.add(createMoveString(i, j, newi, newj));
 				if(collisionWithComputerPiece(board, newi, newj)){
 					break;
@@ -461,7 +461,7 @@ public class MoveGenerator {
 			if(collisionWithComputerPiece(board, newi, newj)){
 				break;
 			}
-			if(!collisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+			if(!collisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj) && collisionWithPlayerPiece(board, newi, newj)){
 				moves.add(createMoveString(i, j, newi, newj));
 				if(collisionWithPlayerPiece(board, newi, newj)){
 					break;
@@ -479,7 +479,7 @@ public class MoveGenerator {
 			if(collisionWithComputerPiece(board, newi, newj)){
 				break;
 			}
-			if(!collisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj)){
+			if(!collisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj) && collisionWithPlayerPiece(board, newi, newj)){
 				moves.add(createMoveString(i, j, newi, newj));
 				if(collisionWithPlayerPiece(board, newi, newj)){
 					break;
