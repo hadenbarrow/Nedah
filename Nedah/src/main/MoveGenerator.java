@@ -514,11 +514,11 @@ public class MoveGenerator {
 	}
 	
 	private boolean playerPieceIsSenior(int i, int j) {
-		return i <= 4;
+		return i <= 2;
 	}
 	
 	private boolean computerPieceIsSenior(int i, int j) {
-		return i >= 4;
+		return i >= 3;
 	}
 	
 	private boolean collisionWithPlayerPiece(int[][] board, int i, int j) {

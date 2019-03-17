@@ -47,7 +47,7 @@ public class Search extends Thread{
 	private int min(int[][] board, int depth, int a, int b) {
 		int best = 5000, score = 0;
 		
-		if(checkForWinner(board) != -1) {return checkForWinner(board);}
+		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return minEval(board, depth);}
 		
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
@@ -72,7 +72,7 @@ public class Search extends Thread{
 	private int max(int[][] board, int depth, int a, int b) {
 		int best = -5000, score = 0;
 		
-		if(checkForWinner(board) != -1) {return checkForWinner(board);}
+		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return maxEval(board, depth);}
 		
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
@@ -94,7 +94,7 @@ public class Search extends Thread{
 		return best;
 	}
 	
-	private int checkForWinner(int[][] board) {
+	private int checkForWinner(int[][] board, int depth) {
 		int computerKings = 0;
 		int playerKings = 0;
 		
@@ -109,10 +109,10 @@ public class Search extends Thread{
 			}
 		}
 		if(computerKings == 0) {
-			return -5000;
+			return -5000 + depth;
 		}
 		else if(playerKings == 0) {
-			return 5000;
+			return 5000 - depth;
 		} else {
 			return -1;
 		}
