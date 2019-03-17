@@ -1,6 +1,7 @@
 package main;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 
@@ -52,7 +53,10 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOver(board)) {break;};
+				if (checkGameOver(board)) {
+					displayBoard();
+					break;
+				}
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -63,7 +67,10 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				checkGameOver(board);
+				if (checkGameOver(board)) {
+					displayBoard();
+					break;
+				}
 				displayBoard();
 				computerTurn = true;
 			}
@@ -72,7 +79,10 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOver(board)) {break;};
+				if (checkGameOver(board)) {
+					displayBoard();
+					break;
+				}
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -83,7 +93,10 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				checkGameOver(board);
+				if (checkGameOver(board)) {
+					displayBoard();
+					break;
+				}
 				displayBoard();
 				computerTurn = true;
 			}
@@ -189,6 +202,13 @@ public class CongressChess {
 		String move = searchTask.getMove();
 		searchTask.closeThread();
 		return move;
+	}
+	
+	private String getUserMove() {
+		List<String> moves = moveGenerator.generateMoves("player", board);
+		Random rand = new Random();
+		int r =rand.nextInt(moves.size());
+		return moves.get(r);
 	}
 
 

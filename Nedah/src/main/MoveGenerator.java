@@ -55,7 +55,7 @@ public class MoveGenerator {
 		int newi = i - 1;
 		int newj = j;
 		
-		if(!collisionWithPlayerPiece(board, newi, newj) && isOnBoard(i, j)) {
+		if(!collisionWithPlayerPiece(board, newi, newj) && isOnBoard(newi, newj) && !collisionWithComputerPiece(board, newi, newj)) {
 			moves.add(createMoveString(i, j, newi, newj));
 
 		}
@@ -69,14 +69,14 @@ public class MoveGenerator {
 		int newi = i - 1;
 		int newj = j + 1;
 		
-		if(!collisionWithPlayerPiece(board, newi, newj) && collisionWithComputerPiece(board, newi, newj) && isOnBoard(i, j)) {
+		if(!collisionWithPlayerPiece(board, newi, newj) && collisionWithComputerPiece(board, newi, newj) && isOnBoard(i, j) && collisionWithComputerPiece(board, newi, newj)) {
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
 		newi = i - 1;
 		newj = j - 1;
 		
-		if(!collisionWithPlayerPiece(board, newi, newj) && collisionWithComputerPiece(board, newi, newj) && isOnBoard(i, j)) {
+		if(!collisionWithPlayerPiece(board, newi, newj) && collisionWithComputerPiece(board, newi, newj) && isOnBoard(i, j) && collisionWithComputerPiece(board, newi, newj)) {
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
@@ -302,7 +302,7 @@ public class MoveGenerator {
 		int newi = i + 1;
 		int newj = j;
 		
-		if(!collisionWithComputerPiece(board, newi, newj) && isOnBoard(i, j)) {
+		if(!collisionWithComputerPiece(board, newi, newj) && isOnBoard(newi, newj) && !collisionWithPlayerPiece(board, newi, newj)) {
 			moves.add(createMoveString(i, j, newi, newj));
 
 		}
@@ -316,14 +316,14 @@ public class MoveGenerator {
 		int newi = i + 1;
 		int newj = j + 1;
 		
-		if(!collisionWithComputerPiece(board, newi, newj) && collisionWithPlayerPiece(board, newi, newj) && isOnBoard(i, j)) {
+		if(!collisionWithComputerPiece(board, newi, newj) && collisionWithPlayerPiece(board, newi, newj) && isOnBoard(i, j) && collisionWithPlayerPiece(board, newi, newj)) {
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
 		newi = i + 1;
 		newj = j - 1;
 		
-		if(!collisionWithComputerPiece(board, newi, newj) && collisionWithPlayerPiece(board, newi, newj) && isOnBoard(i, j)) {
+		if(!collisionWithComputerPiece(board, newi, newj) && collisionWithPlayerPiece(board, newi, newj) && isOnBoard(i, j) && collisionWithPlayerPiece(board, newi, newj)) {
 			moves.add(createMoveString(i, j, newi, newj));
 		}
 		
