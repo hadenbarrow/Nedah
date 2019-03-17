@@ -53,10 +53,11 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -67,10 +68,11 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -79,10 +81,11 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -93,10 +96,11 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -144,7 +148,7 @@ public class CongressChess {
 		board = gameBoardUpdater.updateBoard(board, move);
 	}
 	
-	private boolean checkGameOver(int[][] board){
+	private boolean checkGameOverByKings(int[][] board){
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
 
@@ -172,7 +176,14 @@ public class CongressChess {
 			run = false;
 			return true;
 		}
-		else if(playerMoves.isEmpty()) {
+		return false;
+	}
+	
+	private boolean checkGameOverByMoves(int[][] board) {
+		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
+		
+		if(playerMoves.isEmpty()) {
 			computerWinsByMoves = true;
 			run = false;
 			return true;
@@ -182,6 +193,7 @@ public class CongressChess {
 			run = false;
 			return true;
 		}
+		
 		return false;
 	}
 	
