@@ -30,13 +30,13 @@ public class MoveGenerator {
 				}
 				else if(piece == PIECES.HORSE.value) {
 					playerMoves.addAll(playerHorseForward(board, i, j));
-					if(playerPieceIsSenior(i, j + 1)) {
+					if(playerPieceIsSenior(i, j)) {
 						playerMoves.addAll(playerHorseBackward(board, i, j));
 					}
 				}
 				else if(piece == PIECES.BISHOP.value) {
 					playerMoves.addAll(playerBishopForward(board, i, j));
-					if(playerPieceIsSenior(i, j + 1)) {
+					if(playerPieceIsSenior(i, j)) {
 						playerMoves.addAll(playerBishopBackward(board, i, j));
 					}
 				}
