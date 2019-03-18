@@ -14,6 +14,7 @@ public class CongressChess {
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveTranslator moveTranslator;
 	private int turns;
+	private int gameTime;
 	
 	public CongressChess(){
 		init();
@@ -31,6 +32,7 @@ public class CongressChess {
 		moveTranslator = new MoveTranslator();
 		illegalMoveFlag = false;
 		turns = 0;
+		gameTime = 0;
 		run = true;
 	}
 	
@@ -124,6 +126,7 @@ public class CongressChess {
 		else{
 			System.out.println("The game is a draw.");
 		}
+		gameTime = (int) ((System.currentTimeMillis()-startTime)/1000);
 	}
 	
 	private String promptUserForMove(){
@@ -233,9 +236,18 @@ public class CongressChess {
 		}
 		return temp;
 	}
+	
+	public int getTurns() {
+		return turns;
+	}
+	
+	public int getGameTime() {
+		return gameTime;
+	}
 		
 	public static void main(String[] args){
 		CongressChess instance = new CongressChess();
+		System.out.println("The game lasted " + instance.getTurns() + " turns and " + instance.getGameTime() + " seconds.");
 	}
 	
 	
