@@ -2,7 +2,7 @@ package main;
 
 import java.util.List;
 
-public class Search{
+public class Search2{
 	private String threadMove;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveGenerator moveGenerator;
@@ -11,7 +11,7 @@ public class Search{
 	private int[][] board;
 	private boolean searchWasCutOff;
 	
-	public Search(int[][] board) {
+	public Search2(int[][] board) {
 		this.board = board;
 		leafNodes = 0;
 		gameBoardUpdater = new GameBoardUpdater();
@@ -24,7 +24,7 @@ public class Search{
 		int[][] newBoard = copyBoard(board);
 		int best = -5000, depth = 0, score = 0;
 		String move = "";
-		List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
+		List<String> computerMoves = moveGenerator.generateMoves("player", newBoard);
 		for(String s : computerMoves) {
 			newBoard = copyBoard(board);
 			newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
@@ -48,7 +48,7 @@ public class Search{
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return minEval(board, depth);}
 		
-		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		List<String> playerMoves = moveGenerator.generateMoves("computer", board);
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
@@ -78,7 +78,7 @@ public class Search{
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return maxEval(board, depth);}
 		
-		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
+		List<String> computerMoves = moveGenerator.generateMoves("player", board);
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
@@ -112,10 +112,10 @@ public class Search{
 			}
 		}
 		if(computerKings == 0) {
-			return -5000 + depth;
+			return 5000 - depth;
 		}
 		else if(playerKings == 0) {
-			return 5000 - depth;
+			return -5000 + depth;
 		} else {
 			return -1;
 		}
@@ -126,7 +126,7 @@ public class Search{
 		int playerMaterial = getPlayerMaterial(board);
 		
 		leafNodes++;
-		return computerMaterial - (playerMaterial - depth);
+		return playerMaterial - (computerMaterial - depth);
 	}
 	
 	private int maxEval(int[][] board, int depth){
@@ -134,7 +134,7 @@ public class Search{
 		int playerMaterial = getPlayerMaterial(board);
 		
 		leafNodes++;
-		return computerMaterial - (playerMaterial + depth);
+		return playerMaterial - (computerMaterial + depth);
 	}
 	
 	private int getComputerMaterial(int[][] board){

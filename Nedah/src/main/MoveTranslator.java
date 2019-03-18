@@ -3,18 +3,21 @@ package main;
 public class MoveTranslator {
 
 	public String translateMove(String move) {
-		String oldPos = move.substring(0,2);
-		String newPos = move.substring(2);
-		
-		String oldColumn = oldPos.substring(0,1);
-		String oldRow = oldPos.substring(1);
-		oldRow = translateRow(oldRow);
-		
-		String newColumn = newPos.substring(0,1);
-		String newRow = newPos.substring(1);
-		newRow = translateRow(newRow);
-		
-		return oldColumn+oldRow+newColumn+newRow;
+		if(!move.isEmpty()) {
+			String oldPos = move.substring(0,2);
+			String newPos = move.substring(2);
+			
+			String oldColumn = oldPos.substring(0,1);
+			String oldRow = oldPos.substring(1);
+			oldRow = translateRow(oldRow);
+			
+			String newColumn = newPos.substring(0,1);
+			String newRow = newPos.substring(1);
+			newRow = translateRow(newRow);
+			
+			return oldColumn+oldRow+newColumn+newRow;
+		}
+		return "move is empty!";
 	}
 	
 	private String translateRow(String row) {
