@@ -14,14 +14,10 @@ public class CongressChess {
 	private GameBoardInitializer gameBoardInitializer;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveTranslator moveTranslator;
-	public boolean nedahWon;
-	public int turns;
-	public int gameLength;
 	
-	public CongressChess(boolean nedahFirst){
+	public CongressChess(){
 		init();
-		//intro();
-		computerTurn = nedahFirst; 
+		intro();
 		run();
 	}
 	
@@ -34,11 +30,6 @@ public class CongressChess {
 		gameBoardUpdater = new GameBoardUpdater();
 		moveTranslator = new MoveTranslator();
 		illegalMoveFlag = false;
-		//analyitcs stuff
-		nedahWon = false;
-		turns = 0;
-		gameLength = 0;
-		//
 		run = true;
 	}
 	
@@ -71,9 +62,13 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = false;
 			} else {
-				String opposingAiMove = getOpposingAiMove();
-				updateBoardState(opposingAiMove);
-				System.out.println("Opposing AI's move is: " + opposingAiMove + " (" + moveTranslator.translateMove(opposingAiMove)+")");
+				String userMove = promptUserForMove();
+				illegalMoveFlag = checkMove(userMove);
+				while(illegalMoveFlag){
+					userMove = promptUserForMove();
+					illegalMoveFlag = checkMove(userMove);
+				}
+				updateBoardState(userMove);
 				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
@@ -95,9 +90,13 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = false;
 			} else {
-				String opposingAiMove = getOpposingAiMove();
-				updateBoardState(opposingAiMove);
-				System.out.println("Opposing AI's move is: " + opposingAiMove + " (" + moveTranslator.translateMove(opposingAiMove)+")");
+				String userMove = promptUserForMove();
+				illegalMoveFlag = checkMove(userMove);
+				while(illegalMoveFlag){
+					userMove = promptUserForMove();
+					illegalMoveFlag = checkMove(userMove);
+				}
+				updateBoardState(userMove);
 				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
@@ -115,7 +114,6 @@ public class CongressChess {
 		else if(computerWinsByKings){
 			System.out.println("Both of the players kings have been captured.");
 			System.out.println("Nedah wins!");
-			nedahWon = true;
 		} 
 		else if(playerWinsByMoves) {
 			System.out.println("The computer has no valid moves.");
@@ -124,12 +122,10 @@ public class CongressChess {
 		else if(computerWinsByMoves) {
 			System.out.println("The player has no valid moves.");
 			System.out.println("Nedah wins!");
-			nedahWon = true;
 		}
 		else{
 			System.out.println("The game is a draw.");
 		}
-		gameLength = (int) (System.currentTimeMillis() - startTime)/1000;
 	}
 	
 	private String promptUserForMove(){
@@ -217,25 +213,6 @@ public class CongressChess {
 		}
 		int timeElapsed = (int) ((System.currentTimeMillis()-startTime)/1000);
 		System.out.println("Nedah searched " + depth + " plys");
-		turns++;
-		return move;
-	}
-	
-	private String getOpposingAiMove() {
-		String move = "";
-		int depth = 1;
-		Search2 search = new Search2(board);
-		long startTime = System.currentTimeMillis();
-		
-		while(System.currentTimeMillis() - startTime < 4990) {
-			String temp = search.getComputerMove(startTime, depth);
-			if(!search.getSearchWasCutOff()) {
-				move = temp;
-				depth++;
-			}
-		}
-		System.out.println("The opposing AI searched " + depth + " plys");
-		turns++;
 		return move;
 	}
 	
@@ -260,32 +237,7 @@ public class CongressChess {
 	}
 		
 	public static void main(String[] args){
-		int games = 4;
-		int nedahGames = 0;
-		int gameLength = 0;
-		int turns = 0;
-		
-		for(int i =0; i < games/2; i++) {
-			CongressChess instance = new CongressChess(true);
-			if(instance.nedahWon) {
-				nedahGames++;
-			}
-			gameLength += instance.gameLength;
-			turns += instance.turns;
-		}
-		
-		for(int i =0; i < games/2; i++) {
-			CongressChess instance = new CongressChess(false);
-			if(instance.nedahWon) {
-				nedahGames++;
-			}
-			gameLength += instance.gameLength;
-			turns += instance.turns;
-		}
-		
-		System.out.println("Nedah won " + nedahGames + " out of " + games);
-		System.out.println("Games lasted " + turns/games + " turns on average");
-		System.out.println("Games lasted " + gameLength/games + " seconds on average");
+		CongressChess instance = new CongressChess();
 	}
 	
 	
