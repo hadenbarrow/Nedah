@@ -2,50 +2,49 @@ package main;
 
 import java.util.List;
 
-public class Search extends Thread{
-	private volatile String threadMove;
+public class Search{
+	private String threadMove;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveGenerator moveGenerator;
-	private volatile int maxDepth;
 	private int leafNodes;
+	private int maxDepth;
 	private int[][] board;
-	private boolean running;
+	private boolean searchWasCutOff;
 	
 	public Search(int[][] board) {
 		this.board = board;
-		maxDepth = 1;
 		leafNodes = 0;
 		gameBoardUpdater = new GameBoardUpdater();
 		moveGenerator = new MoveGenerator();
-		running = true;
+		searchWasCutOff = false;
 	}
 	
-	public void run() {
-		getComputerMove();
-	}
-	
-	private void getComputerMove(){
-		while(running) { //iterative deepening
-			int[][] newBoard = copyBoard(board);
-			int best = -5000, depth = 0, score = 0;
-			String move = "";
-			List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
-			for(String s : computerMoves) {
-				newBoard = copyBoard(board);
-				newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
-				score = min(newBoard, depth+1);
-				if(score > best) {
-					best = score;
-					move = s;
-				}
+	public String getComputerMove(long startTime, int maxDepth){
+		this.maxDepth = maxDepth;
+		int[][] newBoard = copyBoard(board);
+		int best = -5000, depth = 0, score = 0;
+		String move = "";
+		List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
+		for(String s : computerMoves) {
+			newBoard = copyBoard(board);
+			newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
+			score = min(newBoard, depth+1, -5000, 5000, startTime);
+			if(score >= best) {
+				best = score;
+				move = s;
 			}
-			threadMove = move;
-			maxDepth++; //deepen search by 1
 		}
+		return move;
 	}
 	
-	private int min(int[][] board, int depth) {
+	private int min(int[][] board, int depth, int a, int b, long startTime) {
 		int best = 5000, score = 0;
+		
+		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
+		if(System.currentTimeMillis() - startTime > 4990) {
+			searchWasCutOff = true;
+			return best;
+		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return minEval(board, depth);}
@@ -54,17 +53,29 @@ public class Search extends Thread{
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
-			score = max(board, depth+1);
+			score = max(board, depth+1, a, b, startTime);
 			if(score < best) {
 				best = score;
+			}
+			if(score <= a) {
+				return best;
+			}
+			if(score < b) {
+				b = score;
 			}
 			board = oldBoard;
 		}
 		return best;
 	}
 	
-	private int max(int[][] board, int depth) {
+	private int max(int[][] board, int depth, int a, int b, long startTime) {
 		int best = -5000, score = 0;
+		
+		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
+		if(System.currentTimeMillis() - startTime > 4990) {
+			searchWasCutOff = true;
+			return best;
+		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return maxEval(board, depth);}
@@ -73,9 +84,15 @@ public class Search extends Thread{
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
-			score = min(board, depth+1);
+			score = min(board, depth+1, a, b, startTime);
 			if(score > best) {
 				best = score;
+			}
+			if(score >= b) {
+				return best;
+			}
+			if(score > a) {
+				a = score;
 			}
 			board = oldBoard;
 		}
@@ -188,7 +205,7 @@ public class Search extends Thread{
 		return leafNodes;
 	}
 	
-	public void stopSearch() {
-		running = false;
+	public boolean getSearchWasCutOff() {
+		return searchWasCutOff;
 	}
 }

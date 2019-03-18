@@ -48,15 +48,17 @@ public class CongressChess {
 	
 	
 	public void run(){
+		long startTime = System.currentTimeMillis();
 		while(run){
 			if(computerTurn){
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -67,10 +69,11 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -79,10 +82,11 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -93,10 +97,11 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOver(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -112,7 +117,7 @@ public class CongressChess {
 		} 
 		else if(playerWinsByMoves) {
 			System.out.println("The computer has no valid moves.");
-			System.out.println("Nedah wins!");
+			System.out.println("The player wins!");
 		}
 		else if(computerWinsByMoves) {
 			System.out.println("The player has no valid moves.");
@@ -144,7 +149,7 @@ public class CongressChess {
 		board = gameBoardUpdater.updateBoard(board, move);
 	}
 	
-	private boolean checkGameOver(int[][] board){
+	private boolean checkGameOverByKings(int[][] board){
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
 
@@ -172,7 +177,14 @@ public class CongressChess {
 			run = false;
 			return true;
 		}
-		else if(playerMoves.isEmpty()) {
+		return false;
+	}
+	
+	private boolean checkGameOverByMoves(int[][] board) {
+		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
+		
+		if(playerMoves.isEmpty()) {
 			computerWinsByMoves = true;
 			run = false;
 			return true;
@@ -182,35 +194,34 @@ public class CongressChess {
 			run = false;
 			return true;
 		}
+		
 		return false;
 	}
 	
 	private String getComputerMove() {
-		Timer timer = new Timer();
-		Searcher searchTask = new Searcher(board);
-		long startTime = System.currentTimeMillis()/1000;
-		timer.schedule(searchTask, 4500);
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String move = "";
+		int depth = 1;
+		Search search = new Search(board);
+		long startTime = System.currentTimeMillis();
+		
+		while(System.currentTimeMillis() - startTime < 4990) {
+			String temp = search.getComputerMove(startTime, depth);
+			if(!search.getSearchWasCutOff()) {
+				move = temp;
+				depth++;
+			}
 		}
-		long timeElapsed = (System.currentTimeMillis()/1000) - startTime;
-		System.out.println("Searched " + searchTask.getDepth() + " plys in " + timeElapsed + " seconds");
-		System.out.println("Searched " + searchTask.getLeafNodes() + " leaf nodes.");
-		String move = searchTask.getMove();
-		searchTask.closeThread();
+		int timeElapsed = (int) ((System.currentTimeMillis()-startTime)/1000);
+		System.out.println("Nedah searched " + depth + " plys");
 		return move;
 	}
 	
-	private String getUserMove() {
+	private String getRandomUserMove() {
 		List<String> moves = moveGenerator.generateMoves("player", board);
 		Random rand = new Random();
 		int r =rand.nextInt(moves.size());
 		return moves.get(r);
 	}
-
 
 	private void displayBoard(){
 		gameBoardDisplay.displayBoard(board);
