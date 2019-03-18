@@ -40,7 +40,6 @@ public class Search{
 	private int min(int[][] board, int depth, int a, int b, long startTime) {
 		int best = 5000, score = 0;
 		
-		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(System.currentTimeMillis() - startTime > 4990) {
 			searchWasCutOff = true;
 			return best;
@@ -58,7 +57,7 @@ public class Search{
 				best = score;
 			}
 			if(score <= a) {
-				return best;
+				return best; //prune
 			}
 			if(score < b) {
 				b = score;
@@ -71,7 +70,6 @@ public class Search{
 	private int max(int[][] board, int depth, int a, int b, long startTime) {
 		int best = -5000, score = 0;
 		
-		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(System.currentTimeMillis() - startTime > 4990) {
 			searchWasCutOff = true;
 			return best;
@@ -89,7 +87,7 @@ public class Search{
 				best = score;
 			}
 			if(score >= b) {
-				return best;
+				return best; //prune
 			}
 			if(score > a) {
 				a = score;

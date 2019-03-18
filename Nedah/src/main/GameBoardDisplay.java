@@ -18,34 +18,34 @@ public class GameBoardDisplay {
 		System.out.println("   A B C D E F G H");
 	}
 	
-	public char pieceLookup(int code){
+	public String pieceLookup(int code){
 		//players pieces
-		if(code == 1){
-			return 'p';
+		if(code == PIECES.PAWN.value){
+			return "p";
 		}
-		if(code == 2){
-			return 'h';
+		if(code == PIECES.HORSE.value){
+			return "h";
 		}
-		if(code == 3){
-			return 'b';
+		if(code == PIECES.BISHOP.value){
+			return "b";
 		}
-		if(code == 4){
-			return 'k';
+		if(code == PIECES.KING.value){
+			return "k";
 		}
 		//computer pieces
-		if(code == 5){
-			return 'P';
+		if(code == PIECES.CPAWN.value){
+			return "P";
 		}
-		if(code == 6){
-			return 'H';
+		if(code == PIECES.CHORSE.value){
+			return "H";
 		}
-		if(code == 7){
-			return 'B';
+		if(code == PIECES.CBISHOP.value){
+			return "B";
 		}
-		if(code == 8){
-			return 'K';
+		if(code == PIECES.CKING.value){
+			return "K";
 		}
-		return '-';
+		return "-";
 	}
 	
 	public char columnLookup(int code){

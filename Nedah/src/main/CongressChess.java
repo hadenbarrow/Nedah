@@ -3,7 +3,6 @@ package main;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Timer;
 
 public class CongressChess {
 	private boolean run, computerTurn, illegalMoveFlag, playerWinsByKings, computerWinsByKings, playerWinsByMoves, computerWinsByMoves;
@@ -14,6 +13,7 @@ public class CongressChess {
 	private GameBoardInitializer gameBoardInitializer;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveTranslator moveTranslator;
+	private int turns;
 	
 	public CongressChess(){
 		init();
@@ -30,6 +30,7 @@ public class CongressChess {
 		gameBoardUpdater = new GameBoardUpdater();
 		moveTranslator = new MoveTranslator();
 		illegalMoveFlag = false;
+		turns = 0;
 		run = true;
 	}
 	
@@ -54,11 +55,10 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOverByKings(board)) {
+				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
 					displayBoard();
 					break;
 				}
-				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -69,11 +69,10 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOverByKings(board)) {
+				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
 					displayBoard();
 					break;
 				}
-				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -82,11 +81,10 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOverByKings(board)) {
+				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
 					displayBoard();
 					break;
 				}
-				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -97,7 +95,7 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOverByKings(board)) {
+				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
 					displayBoard();
 					break;
 				}
@@ -105,7 +103,7 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = true;
 			}
-
+			turns+=2;
 		}
 		if(playerWinsByKings){
 			System.out.println("Both of Nedahs kings have been captured.");
