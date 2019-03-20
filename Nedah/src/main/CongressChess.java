@@ -21,6 +21,7 @@ public class CongressChess {
 	public CongressChess(){
 		init();
 		intro();
+		this.computerTurn = computerTurn;
 		run();
 	}
 	
@@ -67,16 +68,16 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = false;
 			} else {
-				
+				/*
 				String userMove = promptUserForMove();
 				illegalMoveFlag = checkMove(userMove);
 				while(illegalMoveFlag){
 					userMove = promptUserForMove();
 					illegalMoveFlag = checkMove(userMove);
 				}
-				
-				//String userMove = getOpposingAiMove();
-				//System.out.println("Opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
+				*/
+				String userMove = getOpposingAiMove();
+				System.out.println("Opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
 				updateBoardState(userMove);
 				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
 					displayBoard();
@@ -97,15 +98,16 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = false;
 			} else {
-				
+				/*
 				String userMove = promptUserForMove();
 				illegalMoveFlag = checkMove(userMove);
 				while(illegalMoveFlag){
 					userMove = promptUserForMove();
 					illegalMoveFlag = checkMove(userMove);
 				}
-				//String userMove = getOpposingAiMove();
-				//System.out.println("Opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
+				*/
+				String userMove = getOpposingAiMove();
+				System.out.println("Opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
 				updateBoardState(userMove);
 				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
 					displayBoard();
@@ -277,6 +279,23 @@ public class CongressChess {
 		
 	public static void main(String[] args){
 		CongressChess instance = new CongressChess();
+		/*
+		int games = 10;
+		int nedahGames =0;
+		int gameTime =0;
+		for(int i =0; i < games/2; i++) {
+			CongressChess instance = new CongressChess(true);
+			if (instance.nedahWon) nedahGames++;
+			gameTime += instance.gameTime;
+		}
+		for(int i =0; i < games/2; i++) {
+			CongressChess instance = new CongressChess(false);
+			if (instance.nedahWon) nedahGames++;
+			gameTime += instance.gameTime;
+		}
+		System.out.println("Nedah won " + nedahGames+ " games out of "+ games);
+		System.out.println(games + " games took " + gameTime/60 + " minutes");
+		*/
 	}
 	
 	

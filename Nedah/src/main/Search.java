@@ -39,7 +39,7 @@ public class Search{
 	}
 	
 	private int min(int[][] board, int depth, int a, int b, long startTime) {
-		int best = 5000, score = 0;
+		int best = 5000, score = 0; String bestMove = "";
 		
 		if(System.currentTimeMillis() - startTime > 4990) {
 			searchWasCutOff = true;
@@ -51,18 +51,29 @@ public class Search{
 		
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
 		
+		/*
 		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) > depth) {
 			return positionLookup.getEvaluation(board);
 		}
+		*/
+		
+		if(positionLookup.containsBoard(board)) {
+			String bm = positionLookup.getBestMove(board);
+			playerMoves.remove(bm);
+			playerMoves.add(0, bm);
+		}
+		
+		
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = max(board, depth+1, a, b, startTime);
-			positionLookup.addToTable(board, score, a, b, s, depth);
+			positionLookup.addToTable(board, best, a, b, bestMove, depth);
 			if(score < best) {
 				best = score;
 			}
 			if(score <= a) {
+				bestMove = s;
 				return best; //prune
 			}
 			if(score < b) {
@@ -74,7 +85,7 @@ public class Search{
 	}
 	
 	private int max(int[][] board, int depth, int a, int b, long startTime) {
-		int best = -5000, score = 0;
+		int best = -5000, score = 0; String bestMove ="";
 		
 		if(System.currentTimeMillis() - startTime > 4990) {
 			searchWasCutOff = true;
@@ -85,20 +96,28 @@ public class Search{
 		if(depth == maxDepth) {return maxEval(board, depth);}
 		
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
-		
+		/*
 		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) > depth) {
 			return positionLookup.getEvaluation(board);
 		}
+		*/
+		if(positionLookup.containsBoard(board)) {
+			String bm = positionLookup.getBestMove(board);
+			computerMoves.remove(bm);
+			computerMoves.add(0, bm);
+		}
+		
 		
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = min(board, depth+1, a, b, startTime);
-			positionLookup.addToTable(board, score, a, b, s, depth);
+			positionLookup.addToTable(board, best, a, b, bestMove, depth);
 			if(score > best) {
 				best = score;
 			}
 			if(score >= b) {
+				bestMove = s;
 				return best; //prune
 			}
 			if(score > a) {
