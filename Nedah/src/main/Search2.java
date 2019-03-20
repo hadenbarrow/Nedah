@@ -2,16 +2,18 @@ package main;
 
 import java.util.List;
 
-public class Search{
+public class Search2{
 	private String threadMove;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveGenerator moveGenerator;
 	private int leafNodes;
 	private int maxDepth;
+	private int[][] board;
 	private boolean searchWasCutOff;
 	private PositionLookUpTable positionLookup;
 	
-	public Search() {
+	public Search2(int[][] board) {
+		this.board = board;
 		leafNodes = 0;
 		gameBoardUpdater = new GameBoardUpdater();
 		moveGenerator = new MoveGenerator();
@@ -19,13 +21,12 @@ public class Search{
 		positionLookup = new PositionLookUpTable();
 	}
 	
-	public String getComputerMove(int[][] board, long startTime, int maxDepth){
-		searchWasCutOff = false;
+	public String getComputerMove(long startTime, int maxDepth){
 		this.maxDepth = maxDepth;
 		int[][] newBoard = copyBoard(board);
 		int best = -5000, depth = 0, score = 0;
 		String move = "";
-		List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
+		List<String> computerMoves = moveGenerator.generateMoves("player", newBoard);
 		for(String s : computerMoves) {
 			newBoard = copyBoard(board);
 			newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
@@ -49,16 +50,11 @@ public class Search{
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return minEval(board, depth);}
 		
-		List<String> playerMoves = moveGenerator.generateMoves("player", board);
-		
-		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) > depth) {
-			return positionLookup.getEvaluation(board);
-		}
+		List<String> playerMoves = moveGenerator.generateMoves("computer", board);
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = max(board, depth+1, a, b, startTime);
-			positionLookup.addToTable(board, score, a, b, s, depth);
 			if(score < best) {
 				best = score;
 			}
@@ -84,17 +80,11 @@ public class Search{
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
 		if(depth == maxDepth) {return maxEval(board, depth);}
 		
-		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
-		
-		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) > depth) {
-			return positionLookup.getEvaluation(board);
-		}
-		
+		List<String> computerMoves = moveGenerator.generateMoves("player", board);
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = min(board, depth+1, a, b, startTime);
-			positionLookup.addToTable(board, score, a, b, s, depth);
 			if(score > best) {
 				best = score;
 			}
@@ -124,10 +114,10 @@ public class Search{
 			}
 		}
 		if(computerKings == 0) {
-			return -5000 + depth;
+			return 5000 + depth;
 		}
 		else if(playerKings == 0) {
-			return 5000 - depth;
+			return -5000 - depth;
 		} else {
 			return -1;
 		}
@@ -138,7 +128,7 @@ public class Search{
 		int playerMaterial = getPlayerMaterial(board);
 		
 		leafNodes++;
-		return computerMaterial - (playerMaterial - depth);
+		return playerMaterial - (computerMaterial - depth);
 	}
 	
 	private int maxEval(int[][] board, int depth){
@@ -146,7 +136,7 @@ public class Search{
 		int playerMaterial = getPlayerMaterial(board);
 		
 		leafNodes++;
-		return computerMaterial - (playerMaterial + depth);
+		return playerMaterial - (computerMaterial + depth);
 	}
 	
 	private int getComputerMaterial(int[][] board){
@@ -217,21 +207,5 @@ public class Search{
 	
 	public boolean getSearchWasCutOff() {
 		return searchWasCutOff;
-	}
-	
-	public static void main(String[] args) {
-		GameBoardInitializer gbi = new GameBoardInitializer();
-		GameBoardUpdater gbu = new GameBoardUpdater();
-		int[][] board = gbi.generateNewBoard();
-		Search search = new Search();
-		String s = search.getComputerMove(board, System.currentTimeMillis(), 8);
-		System.out.println(s);
-		gbu.updateBoard(board, s);
-		Search2 search2 = new Search2(board);
-		String s2 = search2.getComputerMove(System.currentTimeMillis(), 8);
-		System.out.println(s2);
-		gbu.updateBoard(board, s2);
-		s = search.getComputerMove(board, System.currentTimeMillis(), 8);
-		System.out.println(s);
 	}
 }

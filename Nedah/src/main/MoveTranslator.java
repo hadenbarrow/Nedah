@@ -3,6 +3,9 @@ package main;
 public class MoveTranslator {
 
 	public String translateMove(String move) {
+		if(move.isEmpty()) {
+			return "move is empty!";
+		}
 		String oldPos = move.substring(0,2);
 		String newPos = move.substring(2);
 		
