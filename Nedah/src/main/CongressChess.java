@@ -41,6 +41,11 @@ public class CongressChess {
 		System.out.println("You will be playing against an AI called Nedah.");
 		System.out.println("Who would you like to make the first move? Enter 1 for human or 2 for computer: ");
 		String s = scanner.nextLine();
+		while(!((s.charAt(0) == '1') || (s.charAt(0)=='2'))) {
+			System.out.println("That is not an option.");
+			System.out.println("Who would you like to make the first move? Enter 1 for human or 2 for computer: ");
+			s = scanner.nextLine();
+		}
 		if(s.charAt(0) == '2'){
 			computerTurn = true;
 		} else {
@@ -133,7 +138,8 @@ public class CongressChess {
 		String validMoves = getValidMoves();
 		System.out.println("Valid moves for player: " + validMoves);
 		System.out.println("Enter your move: ");
-		return scanner.nextLine();
+		String s = scanner.nextLine();
+		return s.toLowerCase();
 	}
 	
 	private boolean checkMove(String move){
