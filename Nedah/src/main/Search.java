@@ -47,38 +47,33 @@ public class Search{
 		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
-		if(depth == maxDepth) {return minEval(board, depth);}
+		if(depth == maxDepth) {
+			return minEval(board, depth);
+		}
 		
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
 		
-		/*
-		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) > depth) {
+		
+		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) >= depth) {
 			return positionLookup.getEvaluation(board);
 		}
-		*/
-		
-		if(positionLookup.containsBoard(board)) {
-			String bm = positionLookup.getBestMove(board);
-			playerMoves.remove(bm);
-			playerMoves.add(0, bm);
-		}
-		
 		
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = max(board, depth+1, a, b, startTime);
-			positionLookup.addToTable(board, best, a, b, bestMove, depth);
 			if(score < best) {
 				best = score;
+				bestMove = s;
 			}
 			if(score <= a) {
-				bestMove = s;
+				
 				return best; //prune
 			}
 			if(score < b) {
 				b = score;
 			}
+			positionLookup.addToTable(board, score, a, b, bestMove, depth);
 			board = oldBoard;
 		}
 		return best;
@@ -93,36 +88,31 @@ public class Search{
 		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
-		if(depth == maxDepth) {return maxEval(board, depth);}
+		if(depth == maxDepth) {
+			return maxEval(board, depth);
+		}
 		
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
-		/*
-		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) > depth) {
+		
+		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) >= depth) {
 			return positionLookup.getEvaluation(board);
 		}
-		*/
-		if(positionLookup.containsBoard(board)) {
-			String bm = positionLookup.getBestMove(board);
-			computerMoves.remove(bm);
-			computerMoves.add(0, bm);
-		}
-		
 		
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = min(board, depth+1, a, b, startTime);
-			positionLookup.addToTable(board, best, a, b, bestMove, depth);
 			if(score > best) {
 				best = score;
+				bestMove = s;
 			}
 			if(score >= b) {
-				bestMove = s;
 				return best; //prune
 			}
 			if(score > a) {
 				a = score;
 			}
+			positionLookup.addToTable(board, score, a, b, bestMove, depth);
 			board = oldBoard;
 		}
 		return best;
