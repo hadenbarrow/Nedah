@@ -62,10 +62,11 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -76,10 +77,11 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -88,10 +90,11 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -102,7 +105,7 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
