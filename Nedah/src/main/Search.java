@@ -20,6 +20,7 @@ public class Search{
 	}
 	
 	public String getComputerMove(long startTime, int maxDepth){
+		searchWasCutOff = false;
 		this.maxDepth = maxDepth;
 		int[][] newBoard = copyBoard(board);
 		int best = -5000, depth = 0, score = 0;
@@ -111,10 +112,14 @@ public class Search{
 				}
 			}
 		}
-		if(computerKings == 0) {
+		
+		int pm = moveGenerator.generateMoves("player", board).size();
+		int cm = moveGenerator.generateMoves("computer", board).size();
+		
+		if(computerKings == 0 || cm == 0) {
 			return -5000 + depth;
 		}
-		else if(playerKings == 0) {
+		else if(playerKings == 0 || pm == 0) {
 			return 5000 - depth;
 		} else {
 			return -1;
@@ -124,17 +129,29 @@ public class Search{
 	private int minEval(int[][] board, int depth){
 		int computerMaterial = getComputerMaterial(board);
 		int playerMaterial = getPlayerMaterial(board);
+		int computerMoves = moveGenerator.generateMoves("computer", board).size();
+		int playerMoves = moveGenerator.generateMoves("player", board).size();
+		int computerMovesVal = computerMoves/2;
+		int playerMovesVal = playerMoves/2;
+		int m = computerMovesVal + playerMovesVal;
+		int t = computerMaterial + playerMaterial;
 		
 		leafNodes++;
-		return computerMaterial - (playerMaterial - depth);
+		return (computerMaterial + computerMovesVal) - (playerMaterial + playerMovesVal);
 	}
 	
 	private int maxEval(int[][] board, int depth){
 		int computerMaterial = getComputerMaterial(board);
 		int playerMaterial = getPlayerMaterial(board);
+		int computerMoves = moveGenerator.generateMoves("computer", board).size();
+		int playerMoves = moveGenerator.generateMoves("player", board).size();
+		int computerMovesVal = computerMoves/2;
+		int playerMovesVal = playerMoves/2;
+		int m = computerMovesVal + playerMovesVal;
+		int t = computerMaterial + playerMaterial;
 		
 		leafNodes++;
-		return computerMaterial - (playerMaterial + depth);
+		return (computerMaterial + computerMovesVal) - (playerMaterial + playerMovesVal);
 	}
 	
 	private int getComputerMaterial(int[][] board){
@@ -152,7 +169,7 @@ public class Search{
 					computerMaterial += 3;
 				}
 				else if(piece == PIECES.CKING.value) {
-					computerMaterial += 3;
+					computerMaterial += 10;
 				}
 			}
 		}
@@ -174,7 +191,7 @@ public class Search{
 					playerMaterial += 3;
 				}
 				else if(piece == PIECES.KING.value) {
-					playerMaterial += 3;
+					playerMaterial += 10;
 				}
 			}
 		}
