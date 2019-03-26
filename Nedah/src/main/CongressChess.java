@@ -66,7 +66,7 @@ public class CongressChess {
 					displayBoard();
 					break;
 				}
-				checkGameOverByMoves(board);
+				checkPlayerGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
@@ -81,39 +81,11 @@ public class CongressChess {
 					displayBoard();
 					break;
 				}
-				checkGameOverByMoves(board);
+				checkComputerGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
-			
-			if(computerTurn){
-				String computerMove = getComputerMove();
-				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
-				updateBoardState(computerMove);
-				if (checkGameOverByKings(board)) {
-					displayBoard();
-					break;
-				}
-				checkGameOverByMoves(board);
-				displayBoard();
-				computerTurn = false;
-			} else {
-				String userMove = promptUserForMove();
-				illegalMoveFlag = checkMove(userMove);
-				while(illegalMoveFlag){
-					userMove = promptUserForMove();
-					illegalMoveFlag = checkMove(userMove);
-				}
-				updateBoardState(userMove);
-				if (checkGameOverByKings(board)) {
-					displayBoard();
-					break;
-				}
-				checkGameOverByMoves(board);
-				displayBoard();
-				computerTurn = true;
-			}
-			turns+=2;
+			turns+=1;
 		}
 		if(playerWinsByKings){
 			System.out.println("Both of Nedahs kings have been captured.");
@@ -190,21 +162,25 @@ public class CongressChess {
 		return false;
 	}
 	
-	private boolean checkGameOverByMoves(int[][] board) {
+	private boolean checkPlayerGameOverByMoves(int[][] board) {
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
-		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
 		
 		if(playerMoves.isEmpty()) {
 			computerWinsByMoves = true;
 			run = false;
 			return true;
 		}
-		else if(computerMoves.isEmpty()) {
+		return false;
+	}
+	
+	private boolean checkComputerGameOverByMoves(int[][] board) {
+		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
+		
+		if(computerMoves.isEmpty()) {
 			playerWinsByMoves = true;
 			run = false;
 			return true;
 		}
-		
 		return false;
 	}
 	
