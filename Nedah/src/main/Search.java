@@ -1,5 +1,6 @@
 package main;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Search{
@@ -10,6 +11,7 @@ public class Search{
 	private int maxDepth;
 	private int[][] board;
 	private boolean searchWasCutOff;
+	private HashMap<Integer, String> killerMove;
 	
 	public Search(int[][] board) {
 		this.board = board;
@@ -17,6 +19,7 @@ public class Search{
 		gameBoardUpdater = new GameBoardUpdater();
 		moveGenerator = new MoveGenerator();
 		searchWasCutOff = false;
+		killerMove = new HashMap<Integer, String>();
 	}
 	
 	public String getComputerMove(long startTime, int maxDepth){
@@ -49,6 +52,11 @@ public class Search{
 		if(depth == maxDepth) {return minEval(board, depth);}
 		
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		if(killerMove.containsKey(depth)) {
+			playerMoves.remove(killerMove.get(depth));
+			playerMoves.add(0, killerMove.get(depth));
+		}
+		
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
@@ -57,6 +65,7 @@ public class Search{
 				best = score;
 			}
 			if(score <= a) {
+				killerMove.put(depth, s);
 				return best; //prune
 			}
 			if(score < b) {
@@ -79,6 +88,10 @@ public class Search{
 		if(depth == maxDepth) {return maxEval(board, depth);}
 		
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
+		if(killerMove.containsKey(depth)) {
+			computerMoves.remove(killerMove.get(depth));
+			computerMoves.add(0, killerMove.get(depth));
+		}
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
@@ -87,6 +100,7 @@ public class Search{
 				best = score;
 			}
 			if(score >= b) {
+				killerMove.put(depth, s);
 				return best; //prune
 			}
 			if(score > a) {
@@ -189,6 +203,10 @@ public class Search{
 			}
 		}
 		return copy;
+	}
+	
+	public void resetKillerMove() {
+		killerMove = new HashMap<Integer, String>();
 	}
 	
 	public String getThreadsMove() {
