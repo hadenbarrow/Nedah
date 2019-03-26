@@ -65,7 +65,7 @@ public class Search{
 				best = score;
 			}
 			if(score <= a) {
-				//killerMove.put(depth, s);
+				killerMove.put(depth, s);
 				return best; //prune
 			}
 			if(score < b) {

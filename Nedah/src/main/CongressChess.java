@@ -205,9 +205,9 @@ public class CongressChess {
 		int depth = 1;
 		Search search = new Search(board);
 		long startTime = System.currentTimeMillis();
+		search.resetKillerMove();
 		
 		while(System.currentTimeMillis() - startTime < 4990) {
-			search.resetKillerMove();
 			String temp = search.getComputerMove(startTime, depth);
 			if(!search.getSearchWasCutOff()) {
 				move = temp;
