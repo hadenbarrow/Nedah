@@ -62,24 +62,22 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
-				String userMove = promptUserForMove();
-				illegalMoveFlag = checkMove(userMove);
-				while(illegalMoveFlag){
-					userMove = promptUserForMove();
-					illegalMoveFlag = checkMove(userMove);
-				}
+				String userMove = getOpposingAiMove();
+				System.out.println("The opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
 				updateBoardState(userMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = true;
 			}
@@ -88,21 +86,18 @@ public class CongressChess {
 				String computerMove = getComputerMove();
 				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
 				updateBoardState(computerMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
+				checkGameOverByMoves(board);
 				displayBoard();
 				computerTurn = false;
 			} else {
-				String userMove = promptUserForMove();
-				illegalMoveFlag = checkMove(userMove);
-				while(illegalMoveFlag){
-					userMove = promptUserForMove();
-					illegalMoveFlag = checkMove(userMove);
-				}
+				String userMove = getOpposingAiMove();
+				System.out.println("The opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
 				updateBoardState(userMove);
-				if (checkGameOverByKings(board) || checkGameOverByMoves(board)) {
+				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
 				}
@@ -221,6 +216,24 @@ public class CongressChess {
 		}
 		int timeElapsed = (int) ((System.currentTimeMillis()-startTime)/1000);
 		System.out.println("Nedah searched " + depth + " plys");
+		return move;
+	}
+	
+	private String getOpposingAiMove() {
+		String move = "";
+		int depth = 1;
+		Search2 search = new Search2(board);
+		long startTime = System.currentTimeMillis();
+		
+		while(System.currentTimeMillis() - startTime < 4990) {
+			String temp = search.getComputerMove(startTime, depth);
+			if(!search.getSearchWasCutOff()) {
+				move = temp;
+				depth++;
+			}
+		}
+		int timeElapsed = (int) ((System.currentTimeMillis()-startTime)/1000);
+		System.out.println("Opposing AI searched " + depth + " plys");
 		return move;
 	}
 	
