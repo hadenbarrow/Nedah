@@ -81,31 +81,7 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = true;
 			}
-			
-			if(computerTurn){
-				String computerMove = getComputerMove();
-				System.out.println("Nedah's move is: " + computerMove + " (" + moveTranslator.translateMove(computerMove)+")");
-				updateBoardState(computerMove);
-				if (checkGameOverByKings(board)) {
-					displayBoard();
-					break;
-				}
-				checkGameOverByMoves(board);
-				displayBoard();
-				computerTurn = false;
-			} else {
-				String userMove = getOpposingAiMove();
-				System.out.println("The opposing AI's move is: " + userMove + " (" + moveTranslator.translateMove(userMove)+")");
-				updateBoardState(userMove);
-				if (checkGameOverByKings(board)) {
-					displayBoard();
-					break;
-				}
-				checkGameOverByMoves(board);
-				displayBoard();
-				computerTurn = true;
-			}
-			turns+=2;
+			turns+=1;
 		}
 		if(playerWinsByKings){
 			System.out.println("Both of Nedahs kings have been captured.");
