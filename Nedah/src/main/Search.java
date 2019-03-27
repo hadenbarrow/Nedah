@@ -23,7 +23,7 @@ public class Search{
 	}
 	
 	public String getComputerMove(long startTime, int maxDepth){
-		this.searchWasCutOff = false;
+		//this.searchWasCutOff = false;
 		this.maxDepth = maxDepth;
 		int[][] newBoard = copyBoard(board);
 		int best = -5000, depth = 0, score = 0;
@@ -54,13 +54,13 @@ public class Search{
 		
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
 		if(killerMove.containsKey(depth)) {
+			if(killerMove.get(depth).getSecond() != null) {
+				playerMoves.remove(killerMove.get(depth).getSecond());
+				playerMoves.add(0, killerMove.get(depth).getSecond());
+			}
 			if(killerMove.get(depth).getFirst() != null) {
 				playerMoves.remove(killerMove.get(depth).getFirst());
 				playerMoves.add(0, killerMove.get(depth).getFirst());
-			}
-			if(killerMove.get(depth).getSecond() != null) {
-				playerMoves.remove(killerMove.get(depth).getSecond());
-				playerMoves.add(1, killerMove.get(depth).getSecond());
 			}
 		}
 		
@@ -96,13 +96,13 @@ public class Search{
 		
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
 		if(killerMove.containsKey(depth)) {
+			if(killerMove.get(depth).getSecond() != null) {
+				computerMoves.remove(killerMove.get(depth).getSecond());
+				computerMoves.add(0, killerMove.get(depth).getSecond());
+			}
 			if(killerMove.get(depth).getFirst() != null) {
 				computerMoves.remove(killerMove.get(depth).getFirst());
 				computerMoves.add(0, killerMove.get(depth).getFirst());
-			}
-			if(killerMove.get(depth).getSecond() != null) {
-				computerMoves.remove(killerMove.get(depth).getSecond());
-				computerMoves.add(1, killerMove.get(depth).getSecond());
 			}
 		}
 		for(String s : computerMoves) {
