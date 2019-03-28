@@ -70,6 +70,7 @@ public class CongressChess {
 				displayBoard();
 				computerTurn = false;
 			} else {
+				/*
 				String userMove = promptUserForMove();
 				illegalMoveFlag = checkMove(userMove);
 				while(illegalMoveFlag){
@@ -77,6 +78,10 @@ public class CongressChess {
 					illegalMoveFlag = checkMove(userMove);
 				}
 				updateBoardState(userMove);
+				*/
+				String opposingAiMove = getOpposingAiMove();
+				updateBoardState(opposingAiMove);
+				System.out.println("The opposing AI's move is: " + opposingAiMove + " (" + moveTranslator.translateMove(opposingAiMove)+")");
 				if (checkGameOverByKings(board)) {
 					displayBoard();
 					break;
@@ -184,6 +189,7 @@ public class CongressChess {
 		return false;
 	}
 	
+	
 	private String getComputerMove() {
 		String move = "";
 		int depth = 1;
@@ -197,10 +203,29 @@ public class CongressChess {
 				depth++;
 			}
 		}
-		int timeElapsed = (int) ((System.currentTimeMillis()-startTime)/1000);
+		int timeElapsed = (int) ((System.currentTimeMillis()-startTime));
 		System.out.println("Nedah searched " + depth + " plys");
 		return move;
 	}
+	
+	private String getOpposingAiMove() {
+		String move = "";
+		int depth = 1;
+		Search2 search = new Search2();
+		long startTime = System.currentTimeMillis();
+		
+		while(System.currentTimeMillis() - startTime < 4990) {
+			String temp = search.getComputerMove(board, startTime, depth);
+			if(!search.getSearchWasCutOff()) {
+				move = temp;
+				depth++;
+			}
+		}
+		int timeElapsed = (int) ((System.currentTimeMillis()-startTime));
+		System.out.println("The opposing AI searched " + depth + " plys");
+		return move;
+	}
+	
 	
 	private String getRandomUserMove() {
 		List<String> moves = moveGenerator.generateMoves("player", board);

@@ -2,31 +2,28 @@ package main;
 
 import java.util.List;
 
-public class Search{
+public class Search2{
 	private String threadMove;
 	private GameBoardUpdater gameBoardUpdater;
 	private MoveGenerator moveGenerator;
 	private int leafNodes;
 	private int maxDepth;
 	private boolean searchWasCutOff;
-	private PositionLookUpTable positionLookup;
 	
-	public Search() {
+	public Search2() {
 		leafNodes = 0;
 		gameBoardUpdater = new GameBoardUpdater();
 		moveGenerator = new MoveGenerator();
 		searchWasCutOff = false;
-		positionLookup = new PositionLookUpTable();
 	}
 	
 	public String getComputerMove(int[][] board, long startTime, int maxDepth){
 		searchWasCutOff = false;
-		positionLookup = new PositionLookUpTable();
 		this.maxDepth = maxDepth;
 		int[][] newBoard = copyBoard(board);
 		int best = -5000, depth = 0, score = 0;
 		String move = "";
-		List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
+		List<String> computerMoves = moveGenerator.generateMoves("player", newBoard);
 		for(String s : computerMoves) {
 			newBoard = copyBoard(board);
 			newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
@@ -48,15 +45,9 @@ public class Search{
 		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
-		if(depth == maxDepth) {
-			return eval(board, depth);
-		}
+		if(depth == maxDepth) {return eval(board, depth);}
 		
-		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) <= depth) {
-			return positionLookup.getEvaluation(board);
-		}
-		
-		List<String> playerMoves = moveGenerator.generateMoves("player", board);
+		List<String> playerMoves = moveGenerator.generateMoves("computer", board);
 		
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
@@ -75,7 +66,6 @@ public class Search{
 			}
 			board = oldBoard;
 		}
-		positionLookup.addToTable(board, best, a, b, bestMove, depth);
 		return best;
 	}
 	
@@ -88,22 +78,15 @@ public class Search{
 		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
-		if(depth == maxDepth) {
-			return eval(board, depth);
-		}
+		if(depth == maxDepth) {return eval(board, depth);}
 		
-		if(positionLookup.containsBoard(board) && positionLookup.getDepth(board) <= depth) {
-			return positionLookup.getEvaluation(board);
-		}
-		
-		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
+		List<String> computerMoves = moveGenerator.generateMoves("player", board);
 		
 		
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
 			score = min(board, depth+1, a, b, startTime);
-			
 			
 			if(score > best) {
 				best = score;
@@ -117,7 +100,6 @@ public class Search{
 			}
 			board = oldBoard;
 		}
-		positionLookup.addToTable(board, best, a, b, bestMove, depth);
 		return best;
 	}
 	
@@ -140,10 +122,10 @@ public class Search{
 		int cm = moveGenerator.generateMoves("computer", board).size();
 		
 		if(computerKings == 0 || cm == 0) {
-			return -5000 + depth;
+			return 5000 - depth;
 		}
 		else if(playerKings == 0 || pm == 0) {
-			return 5000 - depth;
+			return -5000 + depth;
 		} else {
 			return -1;
 		}
@@ -160,7 +142,7 @@ public class Search{
 		int t = computerMaterial + playerMaterial;
 		
 		leafNodes++;
-		return (computerMaterial + computerMovesVal) - (playerMaterial + playerMovesVal);
+		return (playerMaterial + playerMovesVal) - (computerMaterial + computerMovesVal);
 	}
 	
 	private int getComputerMaterial(int[][] board){
@@ -231,10 +213,6 @@ public class Search{
 	
 	public boolean getSearchWasCutOff() {
 		return searchWasCutOff;
-	}
-	
-	public void resetTable() {
-		this.positionLookup = new PositionLookUpTable();
 	}
 	
 	public static void main(String[] args) {
