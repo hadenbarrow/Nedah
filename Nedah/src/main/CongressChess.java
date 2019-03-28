@@ -187,11 +187,11 @@ public class CongressChess {
 	private String getComputerMove() {
 		String move = "";
 		int depth = 1;
-		Search search = new Search(board);
+		Search search = new Search();
 		long startTime = System.currentTimeMillis();
 		
 		while(System.currentTimeMillis() - startTime < 4990) {
-			String temp = search.getComputerMove(startTime, depth);
+			String temp = search.getComputerMove(board, startTime, depth);
 			if(!search.getSearchWasCutOff()) {
 				move = temp;
 				depth++;
