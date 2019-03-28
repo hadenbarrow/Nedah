@@ -13,6 +13,7 @@ public class Search{
 	private int[][] board;
 	private boolean searchWasCutOff;
 	private HashMap<String, Integer> historyTable;
+	private SortByWeight sortByWeight;
 	
 	public Search() {
 		this.board = board;
@@ -21,6 +22,7 @@ public class Search{
 		moveGenerator = new MoveGenerator();
 		searchWasCutOff = false;
 		historyTable = new HashMap<String, Integer>();
+		sortByWeight = new SortByWeight(historyTable);
 	}
 	
 	public String getComputerMove(int[][] board, long startTime, int maxDepth){
@@ -30,11 +32,10 @@ public class Search{
 		int best = -5000, depth = 0, score = 0;
 		String move = "";
 		List<String> computerMoves = moveGenerator.generateMoves("computer", newBoard);
-		List<String> playerMoves = moveGenerator.generateMoves("player", newBoard);
 		for(String s : computerMoves) {
 			newBoard = copyBoard(board);
 			newBoard = gameBoardUpdater.updateBoard(newBoard, s); //make move
-			score = min(newBoard, depth+1, -5000, 5000, startTime, playerMoves.size(), computerMoves.size());
+			score = min(newBoard, depth+1, -5000, 5000, startTime);
 			if(score >= best) {
 				best = score;
 				move = s;
@@ -43,7 +44,7 @@ public class Search{
 		return move;
 	}
 	
-	private int min(int[][] board, int depth, int a, int b, long startTime, int pm, int cm) {
+	private int min(int[][] board, int depth, int a, int b, long startTime) {
 		int best = 5000, score = 0;
 		
 		if(System.currentTimeMillis() - startTime > 4990) {
@@ -52,14 +53,14 @@ public class Search{
 		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
-		if(depth == maxDepth) {return eval(board, depth, pm, cm);}
+		if(depth == maxDepth) {return eval(board, depth);}
 		
 		List<String> playerMoves = moveGenerator.generateMoves("player", board);
 		sortMoves(playerMoves);
 		for(String s : playerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
-			score = max(board, depth+1, a, b, startTime, cm, playerMoves.size());
+			score = max(board, depth+1, a, b, startTime);
 			if(score < best) {
 				best = score;
 			}
@@ -75,7 +76,7 @@ public class Search{
 		return best;
 	}
 	
-	private int max(int[][] board, int depth, int a, int b, long startTime, int pm, int cm) {
+	private int max(int[][] board, int depth, int a, int b, long startTime) {
 		int best = -5000, score = 0;
 		
 		if(System.currentTimeMillis() - startTime > 4990) {
@@ -84,14 +85,14 @@ public class Search{
 		}
 		
 		if(checkForWinner(board, depth) != -1) {return checkForWinner(board, depth);}
-		if(depth == maxDepth) {return eval(board, depth, pm, cm);}
+		if(depth == maxDepth) {return eval(board, depth);}
 		
 		List<String> computerMoves = moveGenerator.generateMoves("computer", board);
 		sortMoves(computerMoves);
 		for(String s : computerMoves) {
 			int[][] oldBoard = copyBoard(board);
 			board = gameBoardUpdater.updateBoard(board, s);
-			score = min(board, depth+1, a, b, startTime, pm, computerMoves.size());
+			score = min(board, depth+1, a, b, startTime);
 			if(score > best) {
 				best = score;
 			}
@@ -135,13 +136,13 @@ public class Search{
 		}
 	}
 	
-	private int eval(int[][] board, int depth, int pm, int cm){
+	private int eval(int[][] board, int depth){
 		int computerMaterial = getComputerMaterial(board);
 		int playerMaterial = getPlayerMaterial(board);
-		//int computerMoves = moveGenerator.generateMoves("computer", board).size();
-		//int playerMoves = moveGenerator.generateMoves("player", board).size();
-		int computerMovesVal = cm/2;
-		int playerMovesVal = pm/2;
+		int computerMoves = moveGenerator.generateMoves("computer", board).size();
+		int playerMoves = moveGenerator.generateMoves("player", board).size();
+		int computerMovesVal = computerMoves/2;
+		int playerMovesVal = playerMoves/2;
 		int m = computerMovesVal + playerMovesVal;
 		int t = computerMaterial + playerMaterial;
 		
@@ -212,29 +213,8 @@ public class Search{
 	}
 	
 	public void sortMoves(List<String> moves) {
-		String one = "", two = "";
-		int first=0, second=0;
-		for(String s : moves) {
-			if(historyTable.containsKey(s)) {
-				if(historyTable.get(s) > first) {
-					one = s;
-					first = historyTable.get(s);
-				}
-				else if(historyTable.get(s) > second) {
-					two = s;
-					second = historyTable.get(s);
-				}
-			}
-		}
-		
-		if(two != "") {
-			moves.remove(two);
-			moves.add(0, two);
-		}
-		if(one != "") {
-			moves.remove(one);
-			moves.add(0, one);
-		}
+		sortByWeight.setHistoryTable(historyTable);
+		moves.sort(sortByWeight);
 	}
 	
 	public String getThreadsMove() {
