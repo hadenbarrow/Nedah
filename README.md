@@ -5,7 +5,7 @@ Nedah is an AI that plays a game called Congress Chess that was originally made 
 
 1. Download the zip file. 
 
-![download](https://imgur.com/4pV68kh)
+![download](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/download.png)
 
 2. Open a command prompt instance.
 
