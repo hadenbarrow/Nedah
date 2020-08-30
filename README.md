@@ -60,5 +60,6 @@ The initial position is:
 When you run Nedah you will be prompted as follows:
 ![run](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/runTheProgram.png)
 
-This is what it looks like when you lose to Nedah (you will lose) :
+This is what it looks like when you lose to Nedah (you will lose):
+
 ![youlost](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/nedahWins.png)
