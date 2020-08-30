@@ -11,17 +11,17 @@ Nedah is an AI that plays a game called Congress Chess that was originally made 
 
 3. In your command prompt instance, navigate to "..Nedah-master/Nedah/src/main" 
 
-![navigate](https://imgur.com/ez00p1v)
+![navigate](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/navigateToMain.png)
 
 4. Type "javac \*.java" to compile all the .java files. 
 
-![compile](https://imgur.com/r1uXq6u)
+![compile](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/compile%20.java%20files.png)
 
 5. Navagate back to "Nedah-master/Nedah/src".
 
 6. Type "java main.CongressChess" to run an instance of Nedah. 
 
-![run](https://imgur.com/gXvHJQt)
+![run](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/runTheProgram.png)
 
 7. Congrats! You're ready to play Congress Chess against Nedah.
 
