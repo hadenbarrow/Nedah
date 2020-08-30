@@ -75,3 +75,10 @@ When it's the players turn to move, a list of valid moves will be displayed for 
 This is what it looks like when you lose to Nedah (you will lose):
 
 ![youlost](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/nedahWins.png)
+
+Thanks for reading! This was by far my favorite project during my entire time in university. Huge thanks to Scott Gordon who teaches CSc 180 (among other courses) at Sac State.
+
+If you want to see a list of all the different wacky versions of chess he creates for this course (he creates a new one every semester) you can check it out here: https://athena.ecs.csus.edu/~gordonvs/
+
+You'll also notice that he keeps track of the top performing programs each semester. You can see my name there listed as "Nedah" (Barrow)
+
