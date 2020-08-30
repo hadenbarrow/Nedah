@@ -60,6 +60,18 @@ The initial position is:
 When you run Nedah you will be prompted as follows:
 ![run](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/runTheProgram.png)
 
+When Nedah makes a move you will see a board displayed.
+
+![nedahsmove](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/nedahsMove.png)
+
+A "ply" is equivalent to "looking one move ahead" for each piece Nedah could possibly move. In this case, Nedah checked every possible move, 7 moves deep. As the number of possible moves dwindles and the game progresses, Nedah can search more and more moves ahead. 
+
+Nedah is set to only search for 5 seconds. Allowing it more time would allow it to search deeper.
+
+When it's the players turn to move, a list of valid moves will be displayed for you to choose from. 
+
+![playermoves](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/playersMove.png)
+
 This is what it looks like when you lose to Nedah (you will lose):
 
 ![youlost](https://github.com/hadenbarrow/Nedah/blob/master/readmeImages/nedahWins.png)
